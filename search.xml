@@ -159,8 +159,6 @@
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -p 9090:9000 --name minio \</span><br><span class="line">  -v /mydata/minio/data:/data:z \</span><br><span class="line">  -v /mydata/minio/config:/root/.minio \</span><br><span class="line">  -e MINIO_ACCESS_KEY=root \</span><br><span class="line">  -e MINIO_SECRET_KEY=password \</span><br><span class="line">  -d minio/minio server /data</span><br></pre></td></tr></table></figure>
 
 <p>默认的账户密码都是minioadmin</p>
-<h1 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -p 3306:3306 --name mysql \</span><br><span class="line">--network host \</span><br><span class="line">-v /usr/local/docker/mysql/conf:/etc/mysql \</span><br><span class="line">-v /usr/local/docker/mysql/logs:/var/log/mysql \</span><br><span class="line">-v /usr/local/docker/mysql/data:/var/lib/mysql \</span><br><span class="line">-e MYSQL_ROOT_PASSWORD=sfibsdfbasfbiu~ \</span><br><span class="line">-d mysql:5.7</span><br></pre></td></tr></table></figure>
-
 <h1 id="nginx"><a href="#nginx" class="headerlink" title="nginx"></a>nginx</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -d -p 80:80 \</span><br><span class="line">--network host \</span><br><span class="line">--name nginx \</span><br><span class="line">-v /usr/local/docker/nginx/conf/nginx.conf:/etc/nginx/nginx.conf \</span><br><span class="line">-v /usr/local/docker/nginx/logs:/var/log/nginx  \</span><br><span class="line">--restart=always \</span><br><span class="line">nginx:latest</span><br></pre></td></tr></table></figure>
 
 <h1 id="sentinel"><a href="#sentinel" class="headerlink" title="sentinel"></a>sentinel</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run --name sentinel --network host -d -p 8858:8858 -d bladex/sentinel-dashboard</span><br></pre></td></tr></table></figure>
@@ -169,53 +167,6 @@
 <h1 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h1><p>配置redis.conf属性requirepass（密码）、appendonly（持久化）</p>
 <figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -d -p 6379:6379 \</span><br><span class="line">--network host \</span><br><span class="line">--name redis \</span><br><span class="line">-v /usr/local/docker/redis/data:/data \</span><br><span class="line">-v /usr/local/docker/redis/conf/redis.conf:/etc/redis/redis.conf  \</span><br><span class="line">redis redis-server /etc/redis/redis.conf \</span><br><span class="line">--appendonly yes</span><br></pre></td></tr></table></figure>
 <p>集群：<a href="https://juejin.cn/post/6844904110316060685">https://juejin.cn/post/6844904110316060685</a></p>
-<h1 id="nacos"><a href="#nacos" class="headerlink" title="nacos"></a>nacos</h1><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -d -p 8848:8848 \</span><br><span class="line">--network host \</span><br><span class="line">--name nacos \</span><br><span class="line">--env MODE=standalone \</span><br><span class="line">--env SPRING_DATASOURCE_PLATFORM=mysql \</span><br><span class="line">--env JVM_XMS=512m \</span><br><span class="line">--env JVM_XMX=512m \</span><br><span class="line">--env JVM_XMN=256m \</span><br><span class="line">-v /usr/local/docker/nacos/conf:/home/nacos/conf \</span><br><span class="line">-v /usr/local/docker/nacos/logs:/home/nacos/logs \</span><br><span class="line">nacos/nacos-server:v2.0.3</span><br></pre></td></tr></table></figure>
-
-<p>配置JVM，不然内存经常oom而退出</p>
-<table>
-<thead>
-<tr>
-<th>Nacos</th>
-<th>JVM</th>
-<th>默认值</th>
-<th>含义</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>JVM_XMS</td>
-<td>-Xms</td>
-<td>1g</td>
-<td>初始分配内存</td>
-</tr>
-<tr>
-<td>JVM_XMX</td>
-<td>-Xmx</td>
-<td>1g</td>
-<td>最大分配内存</td>
-</tr>
-<tr>
-<td>JVM_XMN</td>
-<td>-Xmn</td>
-<td>512m</td>
-<td>年轻代大小</td>
-</tr>
-<tr>
-<td>JVM_MS</td>
-<td>-XX:MetaspaceSize</td>
-<td>128m</td>
-<td>元空间初始分配内存</td>
-</tr>
-<tr>
-<td>JVM_MMS</td>
-<td>-XX:MaxMetaspaceSize</td>
-<td>320m</td>
-<td>元空间最大分配内存</td>
-</tr>
-</tbody></table>
-<p>配置conf/application.properties和conf/nacos-logback.xml</p>
-<p>conf/application.properties</p>
-<figure class="highlight properties"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 开启后，springboot连接nacos需要账户密码</span></span><br><span class="line"><span class="meta">nacos.core.auth.enabled</span>=<span class="string">true</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"># mysql配置</span></span><br><span class="line"><span class="meta">spring.datasource.platform</span>=<span class="string">mysql</span></span><br><span class="line"></span><br><span class="line"><span class="meta">db.num</span>=<span class="string">1</span></span><br><span class="line"><span class="meta">db.url.0</span>=<span class="string">jdbc:mysql://127.0.0.1:3306/nacos?useUnicode=true&amp;characterEncoding=UTF-8&amp;useSSL=false&amp;serverTimezone=GMT%2B8</span></span><br><span class="line"><span class="meta">db.user</span>=<span class="string">root</span></span><br><span class="line"><span class="meta">db.password</span>=<span class="string">sfibsdfbasfbiu~</span></span><br></pre></td></tr></table></figure>
-
 <h1 id="5、若依"><a href="#5、若依" class="headerlink" title="5、若依"></a>5、若依</h1><h2 id="5-1、ruoyi-ui"><a href="#5-1、ruoyi-ui" class="headerlink" title="5.1、ruoyi-ui"></a>5.1、ruoyi-ui</h2><h3 id="5-1-1-vue项目打包"><a href="#5-1-1-vue项目打包" class="headerlink" title="5.1.1 vue项目打包"></a>5.1.1 vue项目打包</h3><p>打包ruoyi-ui上传dist文件夹到虚拟机/usr/local目录下，改名为ruoyi-ui</p>
 <h3 id="5-1-2-nginx-conf和Dockerfile"><a href="#5-1-2-nginx-conf和Dockerfile" class="headerlink" title="5.1.2 nginx.conf和Dockerfile"></a>5.1.2 nginx.conf和Dockerfile</h3><p>在/usr/local新建nginx.conf，ruoyi-gateway是docker-compose.yml里网关服务的别名</p>
 <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">  listen    80;</span><br><span class="line">  server_name 192.168.15.129;</span><br><span class="line">  </span><br><span class="line">  location / &#123;</span><br><span class="line">  	root  /usr/share/nginx/html;</span><br><span class="line">    index index.html index.htm;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  location /prod-api/&#123;</span><br><span class="line">    proxy_set_header Host $http_host;</span><br><span class="line">    proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">    proxy_set_header REMOTE-HOST $remote_addr;</span><br><span class="line">    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">    proxy_pass http://ruoyi-gateway:8080/;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  error_page  500 502 503 504 /50x.html;</span><br><span class="line">  location = /50x.html &#123;</span><br><span class="line">     root  html;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -297,6 +248,22 @@
       </tags>
   </entry>
   <entry>
+    <title>Docker 部署 MySQL</title>
+    <url>/2021/08/22/Docker%E9%83%A8%E7%BD%B2Mysql/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -p 3306:3306 --name mysql \</span><br><span class="line">--network host \</span><br><span class="line">-v /usr/<span class="built_in">local</span>/docker/mysql/conf:/etc/mysql \</span><br><span class="line">-v /usr/<span class="built_in">local</span>/docker/mysql/logs:/var/<span class="built_in">log</span>/mysql \</span><br><span class="line">-v /usr/<span class="built_in">local</span>/docker/mysql/data:/var/lib/mysql \</span><br><span class="line">-e MYSQL_ROOT_PASSWORD=sfibsdfbasfbiu~ \</span><br><span class="line">-d mysql:5.7</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>编程基础</category>
+        <category>数据库/SQL</category>
+        <category>安装MySQL</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Docker 部署 Nacos</title>
     <url>/2021/08/22/Docker%E9%83%A8%E7%BD%B2Nacos/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><p>先部署好MySQL，作为nacos持久化方式</p>
@@ -368,6 +335,31 @@
       <tags>
         <tag>Docker</tag>
         <tag>Nacos</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker 部署 Nacos</title>
+    <url>/2021/08/22/Docker%E9%83%A8%E7%BD%B2Nginx/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -d -p 80:80 \</span><br><span class="line">--network host \</span><br><span class="line">--name nginx \</span><br><span class="line">-v /usr/local/docker/nginx/conf/nginx.conf:/etc/nginx/nginx.conf \</span><br><span class="line">-v /usr/local/docker/nginx/logs:/var/log/nginx  \</span><br><span class="line">-v /home/git/projects/blog:/usr/share/nginx/html \</span><br><span class="line">--restart=always \</span><br><span class="line">nginx:latest</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>html文件路径：/usr/share/nginx/html</li>
+<li>配置文件路径：/etc/nginx/conf.d/default.conf</li>
+<li>日志文件路径：/var/log/nginx</li>
+</ul>
+<p>nginx.conf</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">#user  nobody;</span><br><span class="line">worker_processes  4;</span><br><span class="line"></span><br><span class="line">#error_log  logs/error.log;</span><br><span class="line">#error_log  logs/error.log  notice;</span><br><span class="line">#error_log  logs/error.log  info;</span><br><span class="line"></span><br><span class="line">#pid        logs/nginx.pid;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    #log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br><span class="line">    #                  &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br><span class="line">    #                  &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><span class="line"></span><br><span class="line">    #access_log  logs/access.log  main;</span><br><span class="line"></span><br><span class="line">    sendfile        on;</span><br><span class="line">    #tcp_nopush     on;</span><br><span class="line"></span><br><span class="line">    #keepalive_timeout  0;</span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    #gzip  on;</span><br><span class="line"></span><br><span class="line">    upstream halo &#123;</span><br><span class="line">        server 127.0.0.1:8090;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        listen       80;</span><br><span class="line">        listen [::]:80;</span><br><span class="line">        server_name  47.98.224.2;</span><br><span class="line"></span><br><span class="line">        client_max_body_size 1024m;</span><br><span class="line"></span><br><span class="line">        #charset koi8-r;</span><br><span class="line"></span><br><span class="line">        #access_log  logs/host.access.log  main;</span><br><span class="line"></span><br><span class="line">        # location / &#123;</span><br><span class="line">        #    root   html;</span><br><span class="line">        #    index  index.html index.htm;</span><br><span class="line">        # &#125;</span><br><span class="line"></span><br><span class="line">        # location / &#123;</span><br><span class="line">        #     proxy_pass http://localhost:8000;</span><br><span class="line">        # &#125;</span><br><span class="line">        #location /api/ &#123;</span><br><span class="line">        #    proxy_pass http://localhost:9527;</span><br><span class="line">        #    proxy_set_header Host $host;</span><br><span class="line">        #&#125;</span><br><span class="line">        location / &#123;</span><br><span class="line">            proxy_pass http://halo;</span><br><span class="line">            proxy_set_header HOST $host;</span><br><span class="line">            proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">            proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        location /halo/ &#123;</span><br><span class="line">            proxy_pass http://halo/;</span><br><span class="line">            proxy_set_header HOST $host;</span><br><span class="line">            proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">            proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        #error_page  404              /404.html;</span><br><span class="line"></span><br><span class="line">        # redirect server error pages to the static page /50x.html</span><br><span class="line">        #</span><br><span class="line">        error_page   500 502 503 504  /50x.html;</span><br><span class="line">        location = /50x.html &#123;</span><br><span class="line">            root   html;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # proxy the PHP scripts to Apache listening on 127.0.0.1:80</span><br><span class="line">        #</span><br><span class="line">        #location ~ \.php$ &#123;</span><br><span class="line">        #    proxy_pass   http://127.0.0.1;</span><br><span class="line">        #&#125;</span><br><span class="line"></span><br><span class="line">        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span><br><span class="line">        #</span><br><span class="line">        #location ~ \.php$ &#123;</span><br><span class="line">        #    root           html;</span><br><span class="line">        #    fastcgi_pass   127.0.0.1:9000;</span><br><span class="line">        #    fastcgi_index  index.php;</span><br><span class="line">        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span><br><span class="line">        #    include        fastcgi_params;</span><br><span class="line">        #&#125;</span><br><span class="line"></span><br><span class="line">        # deny access to .htaccess files, if Apache&#x27;s document root</span><br><span class="line">        # concurs with nginx&#x27;s one</span><br><span class="line">        #</span><br><span class="line">        #location ~ /\.ht &#123;</span><br><span class="line">        #    deny  all;</span><br><span class="line">        #&#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    # another virtual host using mix of IP-, name-, and port-based configuration</span><br><span class="line">    #</span><br><span class="line">    #server &#123;</span><br><span class="line">    #    listen       8000;</span><br><span class="line">    #    listen       somename:8080;</span><br><span class="line">    #    server_name  somename  alias  another.alias;</span><br><span class="line"></span><br><span class="line">    #    location / &#123;</span><br><span class="line">    #        root   html;</span><br><span class="line">    #        index  index.html index.htm;</span><br><span class="line">    #    &#125;</span><br><span class="line">    #&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    # HTTPS server</span><br><span class="line">    #</span><br><span class="line">    #server &#123;</span><br><span class="line">    #    listen       443 ssl;</span><br><span class="line">    #    server_name  localhost;</span><br><span class="line"></span><br><span class="line">    #    ssl_certificate      cert.pem;</span><br><span class="line">    #    ssl_certificate_key  cert.key;</span><br><span class="line"></span><br><span class="line">    #    ssl_session_cache    shared:SSL:1m;</span><br><span class="line">    #    ssl_session_timeout  5m;</span><br><span class="line"></span><br><span class="line">    #    ssl_ciphers  HIGH:!aNULL:!MD5;</span><br><span class="line">    #    ssl_prefer_server_ciphers  on;</span><br><span class="line"></span><br><span class="line">    #    location / &#123;</span><br><span class="line">    #        root   html;</span><br><span class="line">    #        index  index.html index.htm;</span><br><span class="line">    #    &#125;</span><br><span class="line">    #&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>应用框架</category>
+        <category>分布式/微服务</category>
+        <category>服务发现/注册</category>
+        <category>Nacos</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+        <tag>Nginx</tag>
       </tags>
   </entry>
   <entry>
@@ -465,44 +457,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker 部署 MySQL</title>
-    <url>/2021/08/22/Docker%E9%83%A8%E7%BD%B2Mysql/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -p 3306:3306 --name mysql \</span><br><span class="line">--network host \</span><br><span class="line">-v /usr/<span class="built_in">local</span>/docker/mysql/conf:/etc/mysql \</span><br><span class="line">-v /usr/<span class="built_in">local</span>/docker/mysql/logs:/var/<span class="built_in">log</span>/mysql \</span><br><span class="line">-v /usr/<span class="built_in">local</span>/docker/mysql/data:/var/lib/mysql \</span><br><span class="line">-e MYSQL_ROOT_PASSWORD=sfibsdfbasfbiu~ \</span><br><span class="line">-d mysql:5.7</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>编程基础</category>
-        <category>数据库/SQL</category>
-        <category>安装MySQL</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Feign性能优化</title>
-    <url>/2021/08/22/Feign%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>Feign在默认情况下使用的是JDK原生URLConnection发送HTTP请求，没有连接池，每次发送请求的时候，都会创建新的HttpURLConnection 链接，使用Apache HttpClient 或者OkHttp3等基于连接池的高性能Http客户端可以解决掉这个问题</p>
-<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><h2 id="1、添加依赖"><a href="#1、添加依赖" class="headerlink" title="1、添加依赖"></a>1、添加依赖</h2><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.github.openfeign<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>feign-okhttp<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="2、配置OkHttpClient和ConnectionPool"><a href="#2、配置OkHttpClient和ConnectionPool" class="headerlink" title="2、配置OkHttpClient和ConnectionPool"></a>2、配置OkHttpClient和ConnectionPool</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* okhttp3 连接池配置</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> connectionPoolFactory 链接池配置</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> httpClientProperties httpClient配置</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@ConditionalOnMissingBean(&#123;ConnectionPool.class&#125;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ConnectionPool <span class="title">httpClientConnectionPool</span><span class="params">(FeignHttpClientProperties httpClientProperties, OkHttpClientConnectionPoolFactory connectionPoolFactory)</span> </span>&#123;</span><br><span class="line">    Integer maxTotalConnections = httpClientProperties.getMaxConnections();</span><br><span class="line">    Long timeToLive = httpClientProperties.getTimeToLive();</span><br><span class="line">    TimeUnit ttlUnit = httpClientProperties.getTimeToLiveUnit();</span><br><span class="line">    <span class="keyword">return</span> connectionPoolFactory.create(maxTotalConnections, timeToLive, ttlUnit);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 配置 OkHttpClient</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> httpClientFactory</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> connectionPool</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> httpClientProperties</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@ConditionalOnMissingBean(&#123;OkHttpClient.class&#125;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> OkHttpClient <span class="title">httpClient</span><span class="params">(OkHttpClientFactory httpClientFactory, ConnectionPool connectionPool, FeignHttpClientProperties httpClientProperties)</span> </span>&#123;</span><br><span class="line">    Boolean followRedirects = httpClientProperties.isFollowRedirects();</span><br><span class="line">    Integer connectTimeout = httpClientProperties.getConnectionTimeout();</span><br><span class="line">    <span class="keyword">return</span> httpClientFactory</span><br><span class="line">        .createBuilder(httpClientProperties.isDisableSslValidation())</span><br><span class="line">        <span class="comment">// 设置连接超时</span></span><br><span class="line">        .connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)</span><br><span class="line">        <span class="comment">// 设置读超时</span></span><br><span class="line">        .writeTimeout(<span class="number">30L</span>, TimeUnit.SECONDS)</span><br><span class="line">        <span class="comment">// 设置写超时</span></span><br><span class="line">        .readTimeout(<span class="number">30L</span>, TimeUnit.SECONDS)</span><br><span class="line">        <span class="comment">// 设置是否自动重连</span></span><br><span class="line">        .retryOnConnectionFailure(<span class="keyword">true</span>)</span><br><span class="line">        <span class="comment">// 设置是否自动处理重定向</span></span><br><span class="line">        .followRedirects(followRedirects)</span><br><span class="line">        <span class="comment">// 设置连接池</span></span><br><span class="line">        .connectionPool(connectionPool)</span><br><span class="line">        <span class="comment">// 拦截器</span></span><br><span class="line">        .addInterceptor(<span class="keyword">new</span> OkHttpLogInterceptor())</span><br><span class="line">        .build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="3、开启okhhtp"><a href="#3、开启okhhtp" class="headerlink" title="3、开启okhhtp"></a>3、开启okhhtp</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">feign:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">default:</span></span><br><span class="line">        <span class="attr">connectTimeout:</span> <span class="number">5000</span></span><br><span class="line">        <span class="attr">readTimeout:</span> <span class="number">5000</span></span><br><span class="line">        <span class="attr">loggerLevel:</span> <span class="string">basic</span></span><br><span class="line">  <span class="attr">hystrix:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">okhttp:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">compression:</span></span><br><span class="line">    <span class="attr">request:</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">response:</span> <span class="comment">#设置返回值后，接受参数要改一下。</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span> </span><br></pre></td></tr></table></figure>
-
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2>]]></content>
-      <categories>
-        <category>应用框架</category>
-        <category>分布式/微服务</category>
-        <category>服务调用/负载均衡</category>
-        <category>Feign</category>
-      </categories>
-      <tags>
-        <tag>Feign</tag>
-        <tag>okhttp</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Feign配置超时时间、日志</title>
     <url>/2021/08/22/Feign%E9%85%8D%E7%BD%AE%E8%B6%85%E6%97%B6%E6%97%B6%E9%97%B4%E3%80%81%E6%97%A5%E5%BF%97/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="超时时间"><a href="#超时时间" class="headerlink" title="超时时间"></a>超时时间</h1><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">feign:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">default:</span></span><br><span class="line">        <span class="comment"># 连接超时时间</span></span><br><span class="line">        <span class="attr">connectTimeout:</span> <span class="number">5000</span></span><br><span class="line">        <span class="comment"># 读超时时间</span></span><br><span class="line">        <span class="attr">readTimeout:</span> <span class="number">5000</span></span><br></pre></td></tr></table></figure>
@@ -544,6 +498,55 @@
       </categories>
       <tags>
         <tag>Feign</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Feign性能优化</title>
+    <url>/2021/08/22/Feign%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>Feign在默认情况下使用的是JDK原生URLConnection发送HTTP请求，没有连接池，每次发送请求的时候，都会创建新的HttpURLConnection 链接，使用Apache HttpClient 或者OkHttp3等基于连接池的高性能Http客户端可以解决掉这个问题</p>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><h2 id="1、添加依赖"><a href="#1、添加依赖" class="headerlink" title="1、添加依赖"></a>1、添加依赖</h2><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.github.openfeign<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>feign-okhttp<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2、配置OkHttpClient和ConnectionPool"><a href="#2、配置OkHttpClient和ConnectionPool" class="headerlink" title="2、配置OkHttpClient和ConnectionPool"></a>2、配置OkHttpClient和ConnectionPool</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* okhttp3 连接池配置</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> connectionPoolFactory 链接池配置</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> httpClientProperties httpClient配置</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@ConditionalOnMissingBean(&#123;ConnectionPool.class&#125;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ConnectionPool <span class="title">httpClientConnectionPool</span><span class="params">(FeignHttpClientProperties httpClientProperties, OkHttpClientConnectionPoolFactory connectionPoolFactory)</span> </span>&#123;</span><br><span class="line">    Integer maxTotalConnections = httpClientProperties.getMaxConnections();</span><br><span class="line">    Long timeToLive = httpClientProperties.getTimeToLive();</span><br><span class="line">    TimeUnit ttlUnit = httpClientProperties.getTimeToLiveUnit();</span><br><span class="line">    <span class="keyword">return</span> connectionPoolFactory.create(maxTotalConnections, timeToLive, ttlUnit);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 配置 OkHttpClient</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> httpClientFactory</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> connectionPool</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> httpClientProperties</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@ConditionalOnMissingBean(&#123;OkHttpClient.class&#125;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> OkHttpClient <span class="title">httpClient</span><span class="params">(OkHttpClientFactory httpClientFactory, ConnectionPool connectionPool, FeignHttpClientProperties httpClientProperties)</span> </span>&#123;</span><br><span class="line">    Boolean followRedirects = httpClientProperties.isFollowRedirects();</span><br><span class="line">    Integer connectTimeout = httpClientProperties.getConnectionTimeout();</span><br><span class="line">    <span class="keyword">return</span> httpClientFactory</span><br><span class="line">        .createBuilder(httpClientProperties.isDisableSslValidation())</span><br><span class="line">        <span class="comment">// 设置连接超时</span></span><br><span class="line">        .connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)</span><br><span class="line">        <span class="comment">// 设置读超时</span></span><br><span class="line">        .writeTimeout(<span class="number">30L</span>, TimeUnit.SECONDS)</span><br><span class="line">        <span class="comment">// 设置写超时</span></span><br><span class="line">        .readTimeout(<span class="number">30L</span>, TimeUnit.SECONDS)</span><br><span class="line">        <span class="comment">// 设置是否自动重连</span></span><br><span class="line">        .retryOnConnectionFailure(<span class="keyword">true</span>)</span><br><span class="line">        <span class="comment">// 设置是否自动处理重定向</span></span><br><span class="line">        .followRedirects(followRedirects)</span><br><span class="line">        <span class="comment">// 设置连接池</span></span><br><span class="line">        .connectionPool(connectionPool)</span><br><span class="line">        <span class="comment">// 拦截器</span></span><br><span class="line">        .addInterceptor(<span class="keyword">new</span> OkHttpLogInterceptor())</span><br><span class="line">        .build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3、开启okhhtp"><a href="#3、开启okhhtp" class="headerlink" title="3、开启okhhtp"></a>3、开启okhhtp</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">feign:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">default:</span></span><br><span class="line">        <span class="attr">connectTimeout:</span> <span class="number">5000</span></span><br><span class="line">        <span class="attr">readTimeout:</span> <span class="number">5000</span></span><br><span class="line">        <span class="attr">loggerLevel:</span> <span class="string">basic</span></span><br><span class="line">  <span class="attr">hystrix:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">okhttp:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">compression:</span></span><br><span class="line">    <span class="attr">request:</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">response:</span> <span class="comment">#设置返回值后，接受参数要改一下。</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span> </span><br></pre></td></tr></table></figure>
+
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2>]]></content>
+      <categories>
+        <category>应用框架</category>
+        <category>分布式/微服务</category>
+        <category>服务调用/负载均衡</category>
+        <category>Feign</category>
+      </categories>
+      <tags>
+        <tag>Feign</tag>
+        <tag>okhttp</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kafka 安装与命令</title>
+    <url>/2021/08/22/Kafka%E5%AE%89%E8%A3%85%E4%B8%8E%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="一、安装"><a href="#一、安装" class="headerlink" title="一、安装"></a>一、安装</h1><p>1、zookeeper</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -d --name zookeeper -p 2181:2181 -v /etc/localtime:/etc/localtime wurstmeister/zookeeper</span><br></pre></td></tr></table></figure>
+
+<p>2、kafka</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run  -d --name kafka -p 9092:9092 -e KAFKA_BROKER_ID=0 -e KAFKA_ZOOKEEPER_CONNECT=172.17.0.3:2181 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.15.129:9092 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 -t --network host wurstmeister/kafka</span><br></pre></td></tr></table></figure>
+
+<p>192.168.15.129是虚拟机ip，</p>
+<p>172.17.0.3是zookeeper容器的ip</p>
+<p>–network  host  主机网络模式，让kafka容器处在和虚拟机一样的网络</p>
+<h1 id="二、命令"><a href="#二、命令" class="headerlink" title="二、命令"></a>二、命令</h1><p>命令在/opt/kafka_2.13-2.6.0/bin里</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建topic</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --create --topic test2 --partitions 2 --replication-factor 1</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --create --topic test3 --partitions 2 --replication-factor 1</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看所有的topic</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --list</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --list</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除topic</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --delete --topic test3</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic test3</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看topic详情</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --describe --topic test2</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic test2</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改分区数</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --alter --topic test2 --partitions 4</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic test2 --partitions 6</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建生产者</span></span><br><span class="line">kafka-console-producer.sh --bootstrap-server localhost:9092 --topic test2</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建消费者</span></span><br><span class="line">kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test2</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>应用框架</category>
+        <category>中间件</category>
+        <category>消息队列</category>
+        <category>Kafka</category>
+      </categories>
+      <tags>
+        <tag>Kafka</tag>
+        <tag>消息队列</tag>
       </tags>
   </entry>
   <entry>
@@ -623,33 +626,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Kafka 安装与命令</title>
-    <url>/2021/08/22/Kafka%E5%AE%89%E8%A3%85%E4%B8%8E%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="一、安装"><a href="#一、安装" class="headerlink" title="一、安装"></a>一、安装</h1><p>1、zookeeper</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -d --name zookeeper -p 2181:2181 -v /etc/localtime:/etc/localtime wurstmeister/zookeeper</span><br></pre></td></tr></table></figure>
-
-<p>2、kafka</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run  -d --name kafka -p 9092:9092 -e KAFKA_BROKER_ID=0 -e KAFKA_ZOOKEEPER_CONNECT=172.17.0.3:2181 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.15.129:9092 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 -t --network host wurstmeister/kafka</span><br></pre></td></tr></table></figure>
-
-<p>192.168.15.129是虚拟机ip，</p>
-<p>172.17.0.3是zookeeper容器的ip</p>
-<p>–network  host  主机网络模式，让kafka容器处在和虚拟机一样的网络</p>
-<h1 id="二、命令"><a href="#二、命令" class="headerlink" title="二、命令"></a>二、命令</h1><p>命令在/opt/kafka_2.13-2.6.0/bin里</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建topic</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --create --topic test2 --partitions 2 --replication-factor 1</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --create --topic test3 --partitions 2 --replication-factor 1</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看所有的topic</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --list</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --list</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除topic</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --delete --topic test3</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic test3</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看topic详情</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --describe --topic test2</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic test2</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改分区数</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --alter --topic test2 --partitions 4</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic test2 --partitions 6</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建生产者</span></span><br><span class="line">kafka-console-producer.sh --bootstrap-server localhost:9092 --topic test2</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建消费者</span></span><br><span class="line">kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test2</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>应用框架</category>
-        <category>中间件</category>
-        <category>消息队列</category>
-        <category>Kafka</category>
-      </categories>
-      <tags>
-        <tag>Kafka</tag>
-        <tag>消息队列</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>RocketMQ 安装与命令</title>
     <url>/2021/08/22/RocketMQ%E5%AE%89%E8%A3%85%E4%B8%8E%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="启动步骤"><a href="#启动步骤" class="headerlink" title="启动步骤"></a>启动步骤</h1><p>1、启动Name Server</p>
@@ -674,41 +650,6 @@
       <tags>
         <tag>消息队列</tag>
         <tag>RocketMQ</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>laas，PaaS，SaaS的区别</title>
-    <url>/2021/08/22/laas%EF%BC%8CPaaS%EF%BC%8CSaaS%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><ul>
-<li><p>IaaS（基础设施即服务）</p>
-<ul>
-<li>优势：灵活，自己搭建程序运行环境，除了操作系统，什么都没装，可以安装软件</li>
-<li>缺点：需要自己配置</li>
-<li>实现：阿里云服务器ECS</li>
-</ul>
-</li>
-<li><p>PaaS（平台即服务）</p>
-<ul>
-<li>优势：不需要自己做环境配置，提供一个现成的运行时环境</li>
-<li>缺点：必须使用指定的开发语言，遵循平台的开发规范</li>
-<li>实现：阿里企业级分布式应用服务 EDAS</li>
-</ul>
-</li>
-<li><p>以上两个都是云服务器</p>
-</li>
-<li><p>SaaS（软件即服务）：一个完整的产品了，比如Office365</p>
-</li>
-<li><p>SaaS也包含多租户的含义</p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>其他</category>
-      </categories>
-      <tags>
-        <tag>laas</tag>
-        <tag>PaaS</tag>
-        <tag>SaaS</tag>
       </tags>
   </entry>
   <entry>
@@ -796,6 +737,41 @@
       </categories>
       <tags>
         <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>laas，PaaS，SaaS的区别</title>
+    <url>/2021/08/22/laas%EF%BC%8CPaaS%EF%BC%8CSaaS%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><ul>
+<li><p>IaaS（基础设施即服务）</p>
+<ul>
+<li>优势：灵活，自己搭建程序运行环境，除了操作系统，什么都没装，可以安装软件</li>
+<li>缺点：需要自己配置</li>
+<li>实现：阿里云服务器ECS</li>
+</ul>
+</li>
+<li><p>PaaS（平台即服务）</p>
+<ul>
+<li>优势：不需要自己做环境配置，提供一个现成的运行时环境</li>
+<li>缺点：必须使用指定的开发语言，遵循平台的开发规范</li>
+<li>实现：阿里企业级分布式应用服务 EDAS</li>
+</ul>
+</li>
+<li><p>以上两个都是云服务器</p>
+</li>
+<li><p>SaaS（软件即服务）：一个完整的产品了，比如Office365</p>
+</li>
+<li><p>SaaS也包含多租户的含义</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>其他</category>
+      </categories>
+      <tags>
+        <tag>laas</tag>
+        <tag>PaaS</tag>
+        <tag>SaaS</tag>
       </tags>
   </entry>
   <entry>
@@ -905,26 +881,6 @@
       <tags>
         <tag>微服务</tag>
         <tag>授权</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>微服务负载均衡模式的区别</title>
-    <url>/2021/08/22/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="四层代理（tcp）"><a href="#四层代理（tcp）" class="headerlink" title="四层代理（tcp）"></a>四层代理（tcp）</h1><p>把client发送的报文目标地址(原来是负载均衡设备的IP地址)，根据均衡设备设置的选择web服务器的规则修改为对应的web服务器IP地址，这样client就可以直接跟此服务器建立TCP连接并发送数据</p>
-<p>客户端与服务端直连，一次连接</p>
-<h1 id="七层代理（http）"><a href="#七层代理（http）" class="headerlink" title="七层代理（http）"></a>七层代理（http）</h1><p>七层负载均衡服务器起了一个反向代理服务器的作用，服务器建立一次TCP连接要三次握手，而client要访问webserver要先与七层负载设备进行三次握手后建立TCP连接，把要访问的报文信息发送给七层负载均衡；然后七层负载均衡再根据设置的均衡规则（url,参数，cookie,请求头)选择特定的webserver，然后通过三次握手与此台webserver建立TCP连接，然后webserver把需要的数据发送给七层负载均衡设备，负载均衡设备再把数据发送给client；所以，七层负载均衡设备起到了代理服务器的作用</p>
-<p>客户端与代理建立一次连接<br>代理再与服务点建立连接<br>两次连接</p>
-<p>四层代理性能更好<br>七层代理更灵活<br>4层代理不知道请求的具体内容。 用7层代理，可以根据请求内容(url,参数，cookie,请求头)做很多事情，比如：<br>a:动态代理：不同的url转发到不同服务器。<br>b.风控：屏蔽外网IP请求某些敏感url；根据参数屏蔽某些刷单用户。<br>c.审计：在nginx层记录请求日志。</p>
-]]></content>
-      <categories>
-        <category>应用框架</category>
-        <category>分布式/微服务</category>
-        <category>服务调用/负载均衡</category>
-        <category>其他</category>
-      </categories>
-      <tags>
-        <tag>微服务</tag>
-        <tag>负载均衡</tag>
       </tags>
   </entry>
   <entry>
@@ -1498,6 +1454,68 @@
       <tags>
         <tag>MySQL</tag>
         <tag>SQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>阿里云部署 hexo</title>
+    <url>/2021/08/19/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2hexo/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="安装git"><a href="#安装git" class="headerlink" title="安装git"></a>安装git</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install git  <span class="comment">#安装git</span></span><br><span class="line">git --version    <span class="comment">#查看git版本</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="建立git仓库"><a href="#建立git仓库" class="headerlink" title="建立git仓库"></a>建立git仓库</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">su root     <span class="comment">#先切换到root用户</span></span><br><span class="line">useradd git <span class="comment"># 添加一个新用户</span></span><br><span class="line">passwd git <span class="comment"># 设置git用户密码</span></span><br><span class="line">su git <span class="comment"># 切换用户进行后续操作</span></span><br><span class="line"><span class="built_in">cd</span> /home/git/</span><br><span class="line">mkdir -p projects/blog <span class="comment"># 把项目目录建立起来</span></span><br><span class="line">mkdir repos &amp;&amp; <span class="built_in">cd</span> repos</span><br><span class="line">git init --bare blog.git <span class="comment"># 创建仓库</span></span><br><span class="line"><span class="built_in">cd</span> blog.git/hooks</span><br><span class="line">vim post-receive <span class="comment"># 创建一个钩子</span></span><br></pre></td></tr></table></figure>
+
+<p>账户密码都是git</p>
+<p><code>post-receive</code>文件的内容如下：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">git --work-tree=/home/git/projects/blog --git-dir=/home/git/repos/blog.git checkout -f</span><br></pre></td></tr></table></figure>
+
+<p>让钩子文件删除/home/git/projects/blog目录下原有的文件，然后从blog.git仓库 clone 新的博客静态文件到/home/git/projects/blog目录下</p>
+<p>然后执行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chmod +x post-receive <span class="comment"># 添加可执行权限</span></span><br><span class="line"><span class="built_in">exit</span> <span class="comment"># 返回到root用户</span></span><br><span class="line">chown -R git:git /home/git/repos/blog.git <span class="comment"># 给git用户添加权限</span></span><br></pre></td></tr></table></figure>
+
+<p>这样Git仓库就配好了。在本地试一下能不能把空仓库拉下来：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> git@server_ip:/home/git/repos/blog.git</span><br></pre></td></tr></table></figure>
+
+<h1 id="部署上线"><a href="#部署上线" class="headerlink" title="部署上线"></a>部署上线</h1><p>修改<code>_config.yml</code></p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">deploy:</span></span><br><span class="line">  <span class="attr">type:</span> <span class="string">git</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="string">git@your_ip:/home/git/repos/blog.git</span></span><br><span class="line">  <span class="attr">branch:</span> <span class="string">master</span></span><br></pre></td></tr></table></figure>
+
+<p>然后在git bash窗口执行</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<p>输入密码，即可上传到/home/git/projects/blog目录里</p>
+<h1 id="配置Nginx反向代理"><a href="#配置Nginx反向代理" class="headerlink" title="配置Nginx反向代理"></a>配置Nginx反向代理</h1><p>1、先准备好配置文件<code>nginx.conf</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">#user  nobody;</span><br><span class="line">worker_processes  4;</span><br><span class="line"></span><br><span class="line">#error_log  logs/error.log;</span><br><span class="line">#error_log  logs/error.log  notice;</span><br><span class="line">#error_log  logs/error.log  info;</span><br><span class="line"></span><br><span class="line">#pid        logs/nginx.pid;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">events &#123;</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    #log_format  main  &#x27;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#x27;</span><br><span class="line">    #                  &#x27;$status $body_bytes_sent &quot;$http_referer&quot; &#x27;</span><br><span class="line">    #                  &#x27;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#x27;;</span><br><span class="line"></span><br><span class="line">    #access_log  logs/access.log  main;</span><br><span class="line"></span><br><span class="line">    sendfile        on;</span><br><span class="line">    #tcp_nopush     on;</span><br><span class="line"></span><br><span class="line">    #keepalive_timeout  0;</span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line"></span><br><span class="line">    #gzip  on;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    server &#123;</span><br><span class="line">        listen      80;</span><br><span class="line">        listen [::]:80;</span><br><span class="line">        server_name  47.98.224.2;</span><br><span class="line"></span><br><span class="line">        client_max_body_size 1024m;</span><br><span class="line"></span><br><span class="line">        #charset koi8-r;</span><br><span class="line"></span><br><span class="line">        #access_log  logs/host.access.log  main;</span><br><span class="line"></span><br><span class="line">        location / &#123;</span><br><span class="line">           root   /usr/share/nginx/html;</span><br><span class="line">           index  index.html index.htm;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # location / &#123;</span><br><span class="line">        #     proxy_pass http://localhost:8000;</span><br><span class="line">        # &#125;</span><br><span class="line">        #location /api/ &#123;</span><br><span class="line">        #    proxy_pass http://localhost:9527;</span><br><span class="line">        #    proxy_set_header Host $host;</span><br><span class="line">        #&#125;</span><br><span class="line"></span><br><span class="line">        #error_page  404              /404.html;</span><br><span class="line"></span><br><span class="line">        # redirect server error pages to the static page /50x.html</span><br><span class="line">        #</span><br><span class="line">        error_page   500 502 503 504  /50x.html;</span><br><span class="line">        location = /50x.html &#123;</span><br><span class="line">            root   html;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>2、启动容器即可</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -d -p 80:80 \</span><br><span class="line">--network host \</span><br><span class="line">--name nginx \</span><br><span class="line">-v /usr/<span class="built_in">local</span>/docker/nginx/conf/nginx.conf:/etc/nginx/nginx.conf \</span><br><span class="line">-v /usr/<span class="built_in">local</span>/docker/nginx/logs:/var/<span class="built_in">log</span>/nginx  \</span><br><span class="line">-v /home/git/projects/blog:/usr/share/nginx/html \</span><br><span class="line">--restart=always \</span><br><span class="line">nginx:latest</span><br></pre></td></tr></table></figure>
+
+<p>3、访问<a href="http://ip/%EF%BC%8C%E5%8D%B3%E5%8F%AF%E7%9C%8B%E5%88%B0%E6%95%88%E6%9E%9C">http://IP/，即可看到效果</a></p>
+<h1 id="如果想github和服务器都能访问"><a href="#如果想github和服务器都能访问" class="headerlink" title="如果想github和服务器都能访问"></a>如果想github和服务器都能访问</h1><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>微服务负载均衡模式的区别</title>
+    <url>/2021/08/22/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="四层代理（tcp）"><a href="#四层代理（tcp）" class="headerlink" title="四层代理（tcp）"></a>四层代理（tcp）</h1><p>把client发送的报文目标地址(原来是负载均衡设备的IP地址)，根据均衡设备设置的选择web服务器的规则修改为对应的web服务器IP地址，这样client就可以直接跟此服务器建立TCP连接并发送数据</p>
+<p>客户端与服务端直连，一次连接</p>
+<h1 id="七层代理（http）"><a href="#七层代理（http）" class="headerlink" title="七层代理（http）"></a>七层代理（http）</h1><p>七层负载均衡服务器起了一个反向代理服务器的作用，服务器建立一次TCP连接要三次握手，而client要访问webserver要先与七层负载设备进行三次握手后建立TCP连接，把要访问的报文信息发送给七层负载均衡；然后七层负载均衡再根据设置的均衡规则（url,参数，cookie,请求头)选择特定的webserver，然后通过三次握手与此台webserver建立TCP连接，然后webserver把需要的数据发送给七层负载均衡设备，负载均衡设备再把数据发送给client；所以，七层负载均衡设备起到了代理服务器的作用</p>
+<p>客户端与代理建立一次连接<br>代理再与服务点建立连接<br>两次连接</p>
+<p>四层代理性能更好<br>七层代理更灵活<br>4层代理不知道请求的具体内容。 用7层代理，可以根据请求内容(url,参数，cookie,请求头)做很多事情，比如：<br>a:动态代理：不同的url转发到不同服务器。<br>b.风控：屏蔽外网IP请求某些敏感url；根据参数屏蔽某些刷单用户。<br>c.审计：在nginx层记录请求日志。</p>
+]]></content>
+      <categories>
+        <category>应用框架</category>
+        <category>分布式/微服务</category>
+        <category>服务调用/负载均衡</category>
+        <category>其他</category>
+      </categories>
+      <tags>
+        <tag>微服务</tag>
+        <tag>负载均衡</tag>
       </tags>
   </entry>
   <entry>
