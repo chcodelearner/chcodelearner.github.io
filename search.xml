@@ -148,116 +148,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Docker 部署 MySQL</title>
-    <url>/2021/08/22/Docker%E9%83%A8%E7%BD%B2Mysql/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -p 3306:3306 --name mysql \</span><br><span class="line">--network host \</span><br><span class="line">-v /usr/<span class="built_in">local</span>/docker/mysql/conf:/etc/mysql \</span><br><span class="line">-v /usr/<span class="built_in">local</span>/docker/mysql/logs:/var/<span class="built_in">log</span>/mysql \</span><br><span class="line">-v /usr/<span class="built_in">local</span>/docker/mysql/data:/var/lib/mysql \</span><br><span class="line">-e MYSQL_ROOT_PASSWORD=sfibsdfbasfbiu~ \</span><br><span class="line">-d mysql:5.7</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>编程基础</category>
-        <category>数据库/SQL</category>
-        <category>安装MySQL</category>
-      </categories>
-      <tags>
-        <tag>Docker</tag>
-        <tag>MySQL</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ElasticSearch</title>
-    <url>/2021/08/19/ElasticSearch/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="ElasticSearch7-2-0"><a href="#ElasticSearch7-2-0" class="headerlink" title="ElasticSearch7.2.0"></a>ElasticSearch7.2.0</h1><h1 id="正排索引与倒排索引"><a href="#正排索引与倒排索引" class="headerlink" title="正排索引与倒排索引"></a>正排索引与倒排索引</h1><h2 id="正排索引"><a href="#正排索引" class="headerlink" title="正排索引"></a>正排索引</h2><p>id    name</p>
-<p>1     my name is chen hao<br>2     my name is li si</p>
-<p>以id为主键，建立索引，但在查询内容是不好，比如查询Chenhao、</p>
-<h2 id="倒排索引"><a href="#倒排索引" class="headerlink" title="倒排索引"></a>倒排索引</h2><p>keyword      id</p>
-<p>my               1,2<br>name           1,2<br>is                  1,2<br>chen             1<br>hao              1<br>li                   2</p>
-<p>先通过关键字，找到主键，再通过主键找到内容</p>
-<h1 id="索引操作"><a href="#索引操作" class="headerlink" title="索引操作"></a>索引操作</h1><p>Get    <a href="http://192.168.130.144:9202/pm_perf_data_companymin">http://192.168.130.144:9202/pm_perf_data_companymin</a>   获取索引信息</p>
-<p>Put    <a href="http://192.168.130.144:9202/pm_perf_data_companymin">http://192.168.130.144:9202/pm_perf_data_companymin</a>   新增索引（Put具有幂等性）</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">&quot;settings&quot;</span>: &#123;</span><br><span class="line">		<span class="attr">&quot;number_of_shards&quot;</span>: <span class="number">3</span>,   <span class="comment">//分片数，默认为5</span></span><br><span class="line">		<span class="attr">&quot;number_of_replicas&quot;</span>: <span class="number">2</span>  <span class="comment">//副本数，默认为1</span></span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="attr">&quot;mapping&quot;</span>: &#123;</span><br><span class="line">		<span class="attr">&quot;_doc&quot;</span>: &#123;</span><br><span class="line">			<span class="attr">&quot;properties&quot;</span>: &#123;</span><br><span class="line">				<span class="attr">&quot;commodity_id&quot;</span>: &#123;</span><br><span class="line">					<span class="attr">&quot;type&quot;</span>: <span class="string">&quot;long&quot;</span></span><br><span class="line">				&#125;,</span><br><span class="line">				<span class="attr">&quot;commodity_name&quot;</span>: &#123;</span><br><span class="line">					<span class="attr">&quot;type&quot;</span>: <span class="string">&quot;text&quot;</span></span><br><span class="line">				&#125;,</span><br><span class="line">				<span class="attr">&quot;picture_url&quot;</span>: &#123;</span><br><span class="line">					<span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span></span><br><span class="line">				&#125;,</span><br><span class="line">				<span class="attr">&quot;price&quot;</span>: &#123;</span><br><span class="line">					<span class="attr">&quot;type&quot;</span>: <span class="string">&quot;double&quot;</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Delete   <a href="http://192.168.130.144:9202/pm_perf_data_companymin">http://192.168.130.144:9202/pm_perf_data_companymin</a>   删除索引</p>
-<p>Get   <a href="http://192.168.130.144:9202/_cat/indices?v">http://192.168.130.144:9202/_cat/indices?v</a>   查询全部索引信息</p>
-<h1 id="文档操作"><a href="#文档操作" class="headerlink" title="文档操作"></a>文档操作</h1><h2 id="新增数据"><a href="#新增数据" class="headerlink" title="新增数据"></a>新增数据</h2><p>Post    <a href="http://192.168.130.144:9202/pm_perf_data_companymin/_doc">http://192.168.130.144:9202/pm_perf_data_companymin/_doc</a></p>
-<p>数据格式为Json格式</p>
-<p>Post    <a href="http://192.168.130.144:9202/pm_perf_data_companymin/_doc/%7Bid%7D">http://192.168.130.144:9202/pm_perf_data_companymin/_doc/{id}</a>    指定id</p>
-<p>可以把doc改为create</p>
-<h2 id="主键查询"><a href="#主键查询" class="headerlink" title="主键查询"></a>主键查询</h2><p>Get    <a href="http://192.168.130.144:9202/pm_perf_data_companymin/_doc/%7Bid%7D">http://192.168.130.144:9202/pm_perf_data_companymin/_doc/{id}</a></p>
-<h2 id="全查询"><a href="#全查询" class="headerlink" title="全查询"></a>全查询</h2><p>Get    <a href="http://192.168.130.144:9202/pm_perf_data_companymin/_search">http://192.168.130.144:9202/pm_perf_data_companymin/_search</a></p>
-<h2 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h2><p>POST   <a href="http://192.168.130.144:9202/%7Bindex%7D/_update/%7Bid%7D">http://192.168.130.144:9202/{index}/_update/{id}</a></p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;doc&quot;</span>: &#123;</span><br><span class="line">	     <span class="attr">&quot;k_RESID&quot;</span>: <span class="string">&quot;9b473321-093d-4274-8ad8-840db65394c5&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="query：查询条件：Json格式"><a href="#query：查询条件：Json格式" class="headerlink" title="query：查询条件：Json格式"></a>query：查询条件：Json格式</h1><h2 id="bool用来合并多个查询条件"><a href="#bool用来合并多个查询条件" class="headerlink" title="bool用来合并多个查询条件"></a>bool用来合并多个查询条件</h2><p>包含四个子句</p>
-<h3 id="must：满足全部条件，并参与计算分值，and"><a href="#must：满足全部条件，并参与计算分值，and" class="headerlink" title="must：满足全部条件，并参与计算分值，and"></a>must：满足全部条件，并参与计算分值，and</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;bool&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;must&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;ITEM_CODE&quot;</span>: <span class="string">&quot;MAXPDUSESSION&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;COMPANYCODE&quot;</span>: <span class="string">&quot;HA-ZZ-HNZT&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="should：至少满足一个-or"><a href="#should：至少满足一个-or" class="headerlink" title="should：至少满足一个  or"></a>should：至少满足一个  or</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;bool&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;should&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;ITEM_CODE&quot;</span>: <span class="string">&quot;MAXPDUSESSION&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;ITEM_PARA&quot;</span>: <span class="string">&quot;-1&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="filter：和must一样，但不参与计算分值"><a href="#filter：和must一样，但不参与计算分值" class="headerlink" title="filter：和must一样，但不参与计算分值"></a>filter：和must一样，但不参与计算分值</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;bool&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;filter&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;ITEM_CODE&quot;</span>: <span class="string">&quot;MAXPDUSESSION&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;ITEM_PARA&quot;</span>: <span class="string">&quot;-1&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="must-not：必须不满足条件"><a href="#must-not：必须不满足条件" class="headerlink" title="must_not：必须不满足条件"></a>must_not：必须不满足条件</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;bool&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;must_not&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;ITEM_CODE&quot;</span>: <span class="string">&quot;MAXPDUSESSION&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;ITEM_PARA&quot;</span>: <span class="string">&quot;-1&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="单个条件语句"><a href="#单个条件语句" class="headerlink" title="单个条件语句"></a>单个条件语句</h2><ul>
-<li>match_phase：会分词，但需要结果中也包含所有的分词，而且顺序要求一样</li>
-<li>query_string：和match类似，但是在所有字段中搜索</li>
-<li>prefix：前缀查询</li>
-<li>regexp：正则查询</li>
-<li>fuzzy：模糊查询<ul>
-<li>fuzziness：允许的最大编辑距离，默认不开启模糊查询，相当于fuzziness=0</li>
-<li>prefix_length：控制两个字符串匹配的最小相同的前缀大小，也即是前n个字符不允许编辑，必须与查询词相同</li>
-<li>max_expansions</li>
-<li>transpositions：将相邻位置字符互换算作一次编辑距离</li>
-</ul>
-</li>
-</ul>
-<p>GET pm_perf_data_companymin/_search</p>
-<h3 id="match-all：查询全部数据"><a href="#match-all：查询全部数据" class="headerlink" title="match_all：查询全部数据"></a>match_all：查询全部数据</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="match：模糊查询，会分词"><a href="#match：模糊查询，会分词" class="headerlink" title="match：模糊查询，会分词"></a>match：模糊查询，会分词</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;ITEM_CODE&quot;</span>: <span class="string">&quot;MAXPDUSESSION&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// fuzziness开启纠错检索，默认值是2,表示最多可以纠错两次</span></span><br><span class="line"><span class="comment">// 用户在进行搜索的时候打字错误现象，搜索引擎会自动纠正，然后尝试匹配索引库中的数据</span></span><br><span class="line"><span class="comment">// operator默认是or, and表示查询满足所有条件</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;k_RESPARA&quot;</span>:&#123;</span><br><span class="line">        <span class="attr">&quot;query&quot;</span>:<span class="string">&quot;东莞松山湖华为T园区D1-HRW&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;fuzziness&quot;</span>:<span class="string">&quot;AUTO&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;operator&quot;</span>:<span class="string">&quot;and&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="term：查询某个字段里含有某个关键词的文档，不会分词—-精确查询，"><a href="#term：查询某个字段里含有某个关键词的文档，不会分词—-精确查询，" class="headerlink" title="term：查询某个字段里含有某个关键词的文档，不会分词—-精确查询，="></a>term：查询某个字段里含有某个关键词的文档，不会分词—-精确查询，=</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;term&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;ITEM_CODE&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;MAXPDUSESSION&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="terms：查询某个字段里含有多个关键词的文档，不会分词—-精确查询，in"><a href="#terms：查询某个字段里含有多个关键词的文档，不会分词—-精确查询，in" class="headerlink" title="terms：查询某个字段里含有多个关键词的文档，不会分词—-精确查询，in"></a>terms：查询某个字段里含有多个关键词的文档，不会分词—-精确查询，in</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;terms&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;ITEM_CODE&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;MAXPDUSESSION&quot;</span>,</span><br><span class="line">        <span class="string">&quot;SMF_SESS_MAX_RATE&quot;</span></span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="range：范围查询"><a href="#range：范围查询" class="headerlink" title="range：范围查询"></a>range：范围查询</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;range&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;RECORD_TIME&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;gte&quot;</span>: <span class="string">&quot;2021-06-14 00:00:00&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;lte&quot;</span>: <span class="string">&quot;2021-06-14 00:00:00&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="wildcard：通配符查询-占位符查询"><a href="#wildcard：通配符查询-占位符查询" class="headerlink" title="wildcard：通配符查询/占位符查询"></a>wildcard：通配符查询/占位符查询</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;wildcard&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;ITEM_PARA&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;*-1*&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="sort：排序规则：Json格式"><a href="#sort：排序规则：Json格式" class="headerlink" title="sort：排序规则：Json格式"></a>sort：排序规则：Json格式</h1><p>GET pm_perf_data_companymin/_search</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;sort&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">&quot;RECORD_TIME&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;order&quot;</span>: <span class="string">&quot;desc&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">&quot;FRESHTIME&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;order&quot;</span>: <span class="string">&quot;asc&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="from，size：分页查询：Json格式"><a href="#from，size：分页查询：Json格式" class="headerlink" title="from，size：分页查询：Json格式"></a>from，size：分页查询：Json格式</h1><p>GET pm_perf_data_companymin/_search</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;from&quot;</span>: <span class="number">0</span>, </span><br><span class="line">  <span class="attr">&quot;size&quot;</span>: <span class="number">20</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="source：指定返回结果字段：Json格式"><a href="#source：指定返回结果字段：Json格式" class="headerlink" title="_source：指定返回结果字段：Json格式"></a>_source：指定返回结果字段：Json格式</h1><p>GET pm_perf_data_companymin/_search</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;_source&quot;</span>: [<span class="string">&quot;COMPANYCODE&quot;</span>, <span class="string">&quot;VALUE&quot;</span>], </span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="aggs：聚合规则：Json格式"><a href="#aggs：聚合规则：Json格式" class="headerlink" title="aggs：聚合规则：Json格式"></a>aggs：聚合规则：Json格式</h1><h2 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h2><p>GET pm_perf_data_companymin/_search</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;aggs&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;companycode_group&quot;</span>: &#123;   <span class="comment">// 分组名，接收结果的时候用到，随意命名</span></span><br><span class="line">      <span class="attr">&quot;terms&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;field&quot;</span>: <span class="string">&quot;COMPANYCODE&quot;</span>   <span class="comment">// 分组字段</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;size&quot;</span>:<span class="number">0</span>  <span class="comment">//不显示原始数据，只查询分组数据</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="平均值"><a href="#平均值" class="headerlink" title="平均值"></a>平均值</h2><p>GET pm_perf_data_companymin/_search</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;aggs&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;avg_value&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;avg&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;field&quot;</span>: <span class="string">&quot;VALUE&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;size&quot;</span>:<span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="求和"><a href="#求和" class="headerlink" title="求和"></a>求和</h2><p>GET pm_perf_data_companymin/_search</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;aggs&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;sum_value&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;sum&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;field&quot;</span>: <span class="string">&quot;VALUE&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;size&quot;</span>:<span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="分组后求和"><a href="#分组后求和" class="headerlink" title="分组后求和"></a>分组后求和</h2><p>GET pm_perf_data_companymin/_search</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">GET pm_perf_data_companymin/_search</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;aggs&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;companycode_group&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;terms&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;field&quot;</span>: <span class="string">&quot;COMPANYCODE&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">&quot;aggs&quot;</span>: &#123;</span><br><span class="line">           <span class="attr">&quot;sum_value&quot;</span>: &#123;</span><br><span class="line">              <span class="attr">&quot;sum&quot;</span>: &#123;</span><br><span class="line">                <span class="attr">&quot;field&quot;</span>: <span class="string">&quot;VALUE&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;size&quot;</span>:<span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h1 id="映射关系-mapping"><a href="#映射关系-mapping" class="headerlink" title="映射关系 mapping"></a>映射关系 mapping</h1><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;mapping&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;properties&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;COMPANYCODE&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>  <span class="comment">// 分词是不能用的 要全匹配</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">&quot;FRESHTIME&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;date&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;format&quot;</span>: <span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">&quot;ITEM_CODE&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;text&quot;</span>     <span class="comment">//可以被分词</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">&quot;ITEM_PARA&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">&quot;RECORD_TIME&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;date&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;format&quot;</span>: <span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">&quot;VALUE&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;double&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;index&quot;</span>:fasle  <span class="comment">// 不能作为查询条件</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>应用框架</category>
-        <category>搜索引擎</category>
-        <category>ElasticSearch</category>
-      </categories>
-      <tags>
-        <tag>ElasticSearch</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Docker 启动相关服务</title>
     <url>/2021/08/22/Docker%E5%90%AF%E5%8A%A8%E7%9B%B8%E5%85%B3%E6%9C%8D%E5%8A%A1/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="1、gitlab"><a href="#1、gitlab" class="headerlink" title="1、gitlab"></a>1、gitlab</h1><p><a href="https://juejin.cn/post/6844903924940406797">https://juejin.cn/post/6844903924940406797</a></p>
@@ -481,6 +371,138 @@
       </tags>
   </entry>
   <entry>
+    <title>ElasticSearch</title>
+    <url>/2021/08/19/ElasticSearch/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="ElasticSearch7-2-0"><a href="#ElasticSearch7-2-0" class="headerlink" title="ElasticSearch7.2.0"></a>ElasticSearch7.2.0</h1><h1 id="正排索引与倒排索引"><a href="#正排索引与倒排索引" class="headerlink" title="正排索引与倒排索引"></a>正排索引与倒排索引</h1><h2 id="正排索引"><a href="#正排索引" class="headerlink" title="正排索引"></a>正排索引</h2><p>id    name</p>
+<p>1     my name is chen hao<br>2     my name is li si</p>
+<p>以id为主键，建立索引，但在查询内容是不好，比如查询Chenhao、</p>
+<h2 id="倒排索引"><a href="#倒排索引" class="headerlink" title="倒排索引"></a>倒排索引</h2><p>keyword      id</p>
+<p>my               1,2<br>name           1,2<br>is                  1,2<br>chen             1<br>hao              1<br>li                   2</p>
+<p>先通过关键字，找到主键，再通过主键找到内容</p>
+<h1 id="索引操作"><a href="#索引操作" class="headerlink" title="索引操作"></a>索引操作</h1><p>Get    <a href="http://192.168.130.144:9202/pm_perf_data_companymin">http://192.168.130.144:9202/pm_perf_data_companymin</a>   获取索引信息</p>
+<p>Put    <a href="http://192.168.130.144:9202/pm_perf_data_companymin">http://192.168.130.144:9202/pm_perf_data_companymin</a>   新增索引（Put具有幂等性）</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">&quot;settings&quot;</span>: &#123;</span><br><span class="line">		<span class="attr">&quot;number_of_shards&quot;</span>: <span class="number">3</span>,   <span class="comment">//分片数，默认为5</span></span><br><span class="line">		<span class="attr">&quot;number_of_replicas&quot;</span>: <span class="number">2</span>  <span class="comment">//副本数，默认为1</span></span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="attr">&quot;mapping&quot;</span>: &#123;</span><br><span class="line">		<span class="attr">&quot;_doc&quot;</span>: &#123;</span><br><span class="line">			<span class="attr">&quot;properties&quot;</span>: &#123;</span><br><span class="line">				<span class="attr">&quot;commodity_id&quot;</span>: &#123;</span><br><span class="line">					<span class="attr">&quot;type&quot;</span>: <span class="string">&quot;long&quot;</span></span><br><span class="line">				&#125;,</span><br><span class="line">				<span class="attr">&quot;commodity_name&quot;</span>: &#123;</span><br><span class="line">					<span class="attr">&quot;type&quot;</span>: <span class="string">&quot;text&quot;</span></span><br><span class="line">				&#125;,</span><br><span class="line">				<span class="attr">&quot;picture_url&quot;</span>: &#123;</span><br><span class="line">					<span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span></span><br><span class="line">				&#125;,</span><br><span class="line">				<span class="attr">&quot;price&quot;</span>: &#123;</span><br><span class="line">					<span class="attr">&quot;type&quot;</span>: <span class="string">&quot;double&quot;</span></span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Delete   <a href="http://192.168.130.144:9202/pm_perf_data_companymin">http://192.168.130.144:9202/pm_perf_data_companymin</a>   删除索引</p>
+<p>Get   <a href="http://192.168.130.144:9202/_cat/indices?v">http://192.168.130.144:9202/_cat/indices?v</a>   查询全部索引信息</p>
+<h1 id="文档操作"><a href="#文档操作" class="headerlink" title="文档操作"></a>文档操作</h1><h2 id="新增数据"><a href="#新增数据" class="headerlink" title="新增数据"></a>新增数据</h2><p>Post    <a href="http://192.168.130.144:9202/pm_perf_data_companymin/_doc">http://192.168.130.144:9202/pm_perf_data_companymin/_doc</a></p>
+<p>数据格式为Json格式</p>
+<p>Post    <a href="http://192.168.130.144:9202/pm_perf_data_companymin/_doc/%7Bid%7D">http://192.168.130.144:9202/pm_perf_data_companymin/_doc/{id}</a>    指定id</p>
+<p>可以把doc改为create</p>
+<h2 id="主键查询"><a href="#主键查询" class="headerlink" title="主键查询"></a>主键查询</h2><p>Get    <a href="http://192.168.130.144:9202/pm_perf_data_companymin/_doc/%7Bid%7D">http://192.168.130.144:9202/pm_perf_data_companymin/_doc/{id}</a></p>
+<h2 id="全查询"><a href="#全查询" class="headerlink" title="全查询"></a>全查询</h2><p>Get    <a href="http://192.168.130.144:9202/pm_perf_data_companymin/_search">http://192.168.130.144:9202/pm_perf_data_companymin/_search</a></p>
+<h2 id="修改数据"><a href="#修改数据" class="headerlink" title="修改数据"></a>修改数据</h2><p>POST   <a href="http://192.168.130.144:9202/%7Bindex%7D/_update/%7Bid%7D">http://192.168.130.144:9202/{index}/_update/{id}</a></p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;doc&quot;</span>: &#123;</span><br><span class="line">	     <span class="attr">&quot;k_RESID&quot;</span>: <span class="string">&quot;9b473321-093d-4274-8ad8-840db65394c5&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="query：查询条件：Json格式"><a href="#query：查询条件：Json格式" class="headerlink" title="query：查询条件：Json格式"></a>query：查询条件：Json格式</h1><h2 id="bool用来合并多个查询条件"><a href="#bool用来合并多个查询条件" class="headerlink" title="bool用来合并多个查询条件"></a>bool用来合并多个查询条件</h2><p>包含四个子句</p>
+<h3 id="must：满足全部条件，并参与计算分值，and"><a href="#must：满足全部条件，并参与计算分值，and" class="headerlink" title="must：满足全部条件，并参与计算分值，and"></a>must：满足全部条件，并参与计算分值，and</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;bool&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;must&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;ITEM_CODE&quot;</span>: <span class="string">&quot;MAXPDUSESSION&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;COMPANYCODE&quot;</span>: <span class="string">&quot;HA-ZZ-HNZT&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="should：至少满足一个-or"><a href="#should：至少满足一个-or" class="headerlink" title="should：至少满足一个  or"></a>should：至少满足一个  or</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;bool&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;should&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;ITEM_CODE&quot;</span>: <span class="string">&quot;MAXPDUSESSION&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;ITEM_PARA&quot;</span>: <span class="string">&quot;-1&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="filter：和must一样，但不参与计算分值"><a href="#filter：和must一样，但不参与计算分值" class="headerlink" title="filter：和must一样，但不参与计算分值"></a>filter：和must一样，但不参与计算分值</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;bool&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;filter&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;ITEM_CODE&quot;</span>: <span class="string">&quot;MAXPDUSESSION&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;ITEM_PARA&quot;</span>: <span class="string">&quot;-1&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="must-not：必须不满足条件"><a href="#must-not：必须不满足条件" class="headerlink" title="must_not：必须不满足条件"></a>must_not：必须不满足条件</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;bool&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;must_not&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;ITEM_CODE&quot;</span>: <span class="string">&quot;MAXPDUSESSION&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">            <span class="attr">&quot;ITEM_PARA&quot;</span>: <span class="string">&quot;-1&quot;</span></span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="单个条件语句"><a href="#单个条件语句" class="headerlink" title="单个条件语句"></a>单个条件语句</h2><ul>
+<li>match_phase：会分词，但需要结果中也包含所有的分词，而且顺序要求一样</li>
+<li>query_string：和match类似，但是在所有字段中搜索</li>
+<li>prefix：前缀查询</li>
+<li>regexp：正则查询</li>
+<li>fuzzy：模糊查询<ul>
+<li>fuzziness：允许的最大编辑距离，默认不开启模糊查询，相当于fuzziness=0</li>
+<li>prefix_length：控制两个字符串匹配的最小相同的前缀大小，也即是前n个字符不允许编辑，必须与查询词相同</li>
+<li>max_expansions</li>
+<li>transpositions：将相邻位置字符互换算作一次编辑距离</li>
+</ul>
+</li>
+</ul>
+<p>GET pm_perf_data_companymin/_search</p>
+<h3 id="match-all：查询全部数据"><a href="#match-all：查询全部数据" class="headerlink" title="match_all：查询全部数据"></a>match_all：查询全部数据</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="match：模糊查询，会分词"><a href="#match：模糊查询，会分词" class="headerlink" title="match：模糊查询，会分词"></a>match：模糊查询，会分词</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;ITEM_CODE&quot;</span>: <span class="string">&quot;MAXPDUSESSION&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// fuzziness开启纠错检索，默认值是2,表示最多可以纠错两次</span></span><br><span class="line"><span class="comment">// 用户在进行搜索的时候打字错误现象，搜索引擎会自动纠正，然后尝试匹配索引库中的数据</span></span><br><span class="line"><span class="comment">// operator默认是or, and表示查询满足所有条件</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;k_RESPARA&quot;</span>:&#123;</span><br><span class="line">        <span class="attr">&quot;query&quot;</span>:<span class="string">&quot;东莞松山湖华为T园区D1-HRW&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;fuzziness&quot;</span>:<span class="string">&quot;AUTO&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;operator&quot;</span>:<span class="string">&quot;and&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="term：查询某个字段里含有某个关键词的文档，不会分词—-精确查询，"><a href="#term：查询某个字段里含有某个关键词的文档，不会分词—-精确查询，" class="headerlink" title="term：查询某个字段里含有某个关键词的文档，不会分词—-精确查询，="></a>term：查询某个字段里含有某个关键词的文档，不会分词—-精确查询，=</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;term&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;ITEM_CODE&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;MAXPDUSESSION&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="terms：查询某个字段里含有多个关键词的文档，不会分词—-精确查询，in"><a href="#terms：查询某个字段里含有多个关键词的文档，不会分词—-精确查询，in" class="headerlink" title="terms：查询某个字段里含有多个关键词的文档，不会分词—-精确查询，in"></a>terms：查询某个字段里含有多个关键词的文档，不会分词—-精确查询，in</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;terms&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;ITEM_CODE&quot;</span>: [</span><br><span class="line">        <span class="string">&quot;MAXPDUSESSION&quot;</span>,</span><br><span class="line">        <span class="string">&quot;SMF_SESS_MAX_RATE&quot;</span></span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="range：范围查询"><a href="#range：范围查询" class="headerlink" title="range：范围查询"></a>range：范围查询</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;range&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;RECORD_TIME&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;gte&quot;</span>: <span class="string">&quot;2021-06-14 00:00:00&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;lte&quot;</span>: <span class="string">&quot;2021-06-14 00:00:00&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="wildcard：通配符查询-占位符查询"><a href="#wildcard：通配符查询-占位符查询" class="headerlink" title="wildcard：通配符查询/占位符查询"></a>wildcard：通配符查询/占位符查询</h3><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;wildcard&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;ITEM_PARA&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;value&quot;</span>: <span class="string">&quot;*-1*&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="sort：排序规则：Json格式"><a href="#sort：排序规则：Json格式" class="headerlink" title="sort：排序规则：Json格式"></a>sort：排序规则：Json格式</h1><p>GET pm_perf_data_companymin/_search</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;sort&quot;</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">&quot;RECORD_TIME&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;order&quot;</span>: <span class="string">&quot;desc&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">&quot;FRESHTIME&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;order&quot;</span>: <span class="string">&quot;asc&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="from，size：分页查询：Json格式"><a href="#from，size：分页查询：Json格式" class="headerlink" title="from，size：分页查询：Json格式"></a>from，size：分页查询：Json格式</h1><p>GET pm_perf_data_companymin/_search</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;from&quot;</span>: <span class="number">0</span>, </span><br><span class="line">  <span class="attr">&quot;size&quot;</span>: <span class="number">20</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="source：指定返回结果字段：Json格式"><a href="#source：指定返回结果字段：Json格式" class="headerlink" title="_source：指定返回结果字段：Json格式"></a>_source：指定返回结果字段：Json格式</h1><p>GET pm_perf_data_companymin/_search</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;_source&quot;</span>: [<span class="string">&quot;COMPANYCODE&quot;</span>, <span class="string">&quot;VALUE&quot;</span>], </span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="aggs：聚合规则：Json格式"><a href="#aggs：聚合规则：Json格式" class="headerlink" title="aggs：聚合规则：Json格式"></a>aggs：聚合规则：Json格式</h1><h2 id="分组"><a href="#分组" class="headerlink" title="分组"></a>分组</h2><p>GET pm_perf_data_companymin/_search</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;aggs&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;companycode_group&quot;</span>: &#123;   <span class="comment">// 分组名，接收结果的时候用到，随意命名</span></span><br><span class="line">      <span class="attr">&quot;terms&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;field&quot;</span>: <span class="string">&quot;COMPANYCODE&quot;</span>   <span class="comment">// 分组字段</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;size&quot;</span>:<span class="number">0</span>  <span class="comment">//不显示原始数据，只查询分组数据</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="平均值"><a href="#平均值" class="headerlink" title="平均值"></a>平均值</h2><p>GET pm_perf_data_companymin/_search</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;aggs&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;avg_value&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;avg&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;field&quot;</span>: <span class="string">&quot;VALUE&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;size&quot;</span>:<span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="求和"><a href="#求和" class="headerlink" title="求和"></a>求和</h2><p>GET pm_perf_data_companymin/_search</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;aggs&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;sum_value&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;sum&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;field&quot;</span>: <span class="string">&quot;VALUE&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;size&quot;</span>:<span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="分组后求和"><a href="#分组后求和" class="headerlink" title="分组后求和"></a>分组后求和</h2><p>GET pm_perf_data_companymin/_search</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">GET pm_perf_data_companymin/_search</span><br><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;query&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;match_all&quot;</span>: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;aggs&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;companycode_group&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;terms&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;field&quot;</span>: <span class="string">&quot;COMPANYCODE&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">&quot;aggs&quot;</span>: &#123;</span><br><span class="line">           <span class="attr">&quot;sum_value&quot;</span>: &#123;</span><br><span class="line">              <span class="attr">&quot;sum&quot;</span>: &#123;</span><br><span class="line">                <span class="attr">&quot;field&quot;</span>: <span class="string">&quot;VALUE&quot;</span></span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">&quot;size&quot;</span>:<span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="映射关系-mapping"><a href="#映射关系-mapping" class="headerlink" title="映射关系 mapping"></a>映射关系 mapping</h1><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;mapping&quot;</span>: &#123;</span><br><span class="line">    <span class="attr">&quot;properties&quot;</span>: &#123;</span><br><span class="line">      <span class="attr">&quot;COMPANYCODE&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span>  <span class="comment">// 分词是不能用的 要全匹配</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">&quot;FRESHTIME&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;date&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;format&quot;</span>: <span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">&quot;ITEM_CODE&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;text&quot;</span>     <span class="comment">//可以被分词</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">&quot;ITEM_PARA&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;keyword&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">&quot;RECORD_TIME&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;date&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;format&quot;</span>: <span class="string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">&quot;VALUE&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;type&quot;</span>: <span class="string">&quot;double&quot;</span>,</span><br><span class="line">        <span class="attr">&quot;index&quot;</span>:fasle  <span class="comment">// 不能作为查询条件</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>应用框架</category>
+        <category>搜索引擎</category>
+        <category>ElasticSearch</category>
+      </categories>
+      <tags>
+        <tag>ElasticSearch</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Docker 部署 MySQL</title>
+    <url>/2021/08/22/Docker%E9%83%A8%E7%BD%B2Mysql/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -p 3306:3306 --name mysql \</span><br><span class="line">--network host \</span><br><span class="line">-v /usr/<span class="built_in">local</span>/docker/mysql/conf:/etc/mysql \</span><br><span class="line">-v /usr/<span class="built_in">local</span>/docker/mysql/logs:/var/<span class="built_in">log</span>/mysql \</span><br><span class="line">-v /usr/<span class="built_in">local</span>/docker/mysql/data:/var/lib/mysql \</span><br><span class="line">-e MYSQL_ROOT_PASSWORD=sfibsdfbasfbiu~ \</span><br><span class="line">-d mysql:5.7</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>编程基础</category>
+        <category>数据库/SQL</category>
+        <category>安装MySQL</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+        <tag>MySQL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Feign性能优化</title>
+    <url>/2021/08/22/Feign%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>Feign在默认情况下使用的是JDK原生URLConnection发送HTTP请求，没有连接池，每次发送请求的时候，都会创建新的HttpURLConnection 链接，使用Apache HttpClient 或者OkHttp3等基于连接池的高性能Http客户端可以解决掉这个问题</p>
+<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><h2 id="1、添加依赖"><a href="#1、添加依赖" class="headerlink" title="1、添加依赖"></a>1、添加依赖</h2><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.github.openfeign<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>feign-okhttp<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2、配置OkHttpClient和ConnectionPool"><a href="#2、配置OkHttpClient和ConnectionPool" class="headerlink" title="2、配置OkHttpClient和ConnectionPool"></a>2、配置OkHttpClient和ConnectionPool</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* okhttp3 连接池配置</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> connectionPoolFactory 链接池配置</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> httpClientProperties httpClient配置</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@ConditionalOnMissingBean(&#123;ConnectionPool.class&#125;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ConnectionPool <span class="title">httpClientConnectionPool</span><span class="params">(FeignHttpClientProperties httpClientProperties, OkHttpClientConnectionPoolFactory connectionPoolFactory)</span> </span>&#123;</span><br><span class="line">    Integer maxTotalConnections = httpClientProperties.getMaxConnections();</span><br><span class="line">    Long timeToLive = httpClientProperties.getTimeToLive();</span><br><span class="line">    TimeUnit ttlUnit = httpClientProperties.getTimeToLiveUnit();</span><br><span class="line">    <span class="keyword">return</span> connectionPoolFactory.create(maxTotalConnections, timeToLive, ttlUnit);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 配置 OkHttpClient</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> httpClientFactory</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> connectionPool</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> httpClientProperties</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@ConditionalOnMissingBean(&#123;OkHttpClient.class&#125;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> OkHttpClient <span class="title">httpClient</span><span class="params">(OkHttpClientFactory httpClientFactory, ConnectionPool connectionPool, FeignHttpClientProperties httpClientProperties)</span> </span>&#123;</span><br><span class="line">    Boolean followRedirects = httpClientProperties.isFollowRedirects();</span><br><span class="line">    Integer connectTimeout = httpClientProperties.getConnectionTimeout();</span><br><span class="line">    <span class="keyword">return</span> httpClientFactory</span><br><span class="line">        .createBuilder(httpClientProperties.isDisableSslValidation())</span><br><span class="line">        <span class="comment">// 设置连接超时</span></span><br><span class="line">        .connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)</span><br><span class="line">        <span class="comment">// 设置读超时</span></span><br><span class="line">        .writeTimeout(<span class="number">30L</span>, TimeUnit.SECONDS)</span><br><span class="line">        <span class="comment">// 设置写超时</span></span><br><span class="line">        .readTimeout(<span class="number">30L</span>, TimeUnit.SECONDS)</span><br><span class="line">        <span class="comment">// 设置是否自动重连</span></span><br><span class="line">        .retryOnConnectionFailure(<span class="keyword">true</span>)</span><br><span class="line">        <span class="comment">// 设置是否自动处理重定向</span></span><br><span class="line">        .followRedirects(followRedirects)</span><br><span class="line">        <span class="comment">// 设置连接池</span></span><br><span class="line">        .connectionPool(connectionPool)</span><br><span class="line">        <span class="comment">// 拦截器</span></span><br><span class="line">        .addInterceptor(<span class="keyword">new</span> OkHttpLogInterceptor())</span><br><span class="line">        .build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3、开启okhhtp"><a href="#3、开启okhhtp" class="headerlink" title="3、开启okhhtp"></a>3、开启okhhtp</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">feign:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">default:</span></span><br><span class="line">        <span class="attr">connectTimeout:</span> <span class="number">5000</span></span><br><span class="line">        <span class="attr">readTimeout:</span> <span class="number">5000</span></span><br><span class="line">        <span class="attr">loggerLevel:</span> <span class="string">basic</span></span><br><span class="line">  <span class="attr">hystrix:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">okhttp:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">compression:</span></span><br><span class="line">    <span class="attr">request:</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">response:</span> <span class="comment">#设置返回值后，接受参数要改一下。</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span> </span><br></pre></td></tr></table></figure>
+
+<h2 id=""><a href="#" class="headerlink" title=""></a></h2>]]></content>
+      <categories>
+        <category>应用框架</category>
+        <category>分布式/微服务</category>
+        <category>服务调用/负载均衡</category>
+        <category>Feign</category>
+      </categories>
+      <tags>
+        <tag>Feign</tag>
+        <tag>okhttp</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Feign配置超时时间、日志</title>
     <url>/2021/08/22/Feign%E9%85%8D%E7%BD%AE%E8%B6%85%E6%97%B6%E6%97%B6%E9%97%B4%E3%80%81%E6%97%A5%E5%BF%97/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="超时时间"><a href="#超时时间" class="headerlink" title="超时时间"></a>超时时间</h1><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">feign:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">default:</span></span><br><span class="line">        <span class="comment"># 连接超时时间</span></span><br><span class="line">        <span class="attr">connectTimeout:</span> <span class="number">5000</span></span><br><span class="line">        <span class="comment"># 读超时时间</span></span><br><span class="line">        <span class="attr">readTimeout:</span> <span class="number">5000</span></span><br></pre></td></tr></table></figure>
@@ -522,82 +544,6 @@
       </categories>
       <tags>
         <tag>Feign</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>RocketMQ 安装与命令</title>
-    <url>/2021/08/22/RocketMQ%E5%AE%89%E8%A3%85%E4%B8%8E%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="启动步骤"><a href="#启动步骤" class="headerlink" title="启动步骤"></a>启动步骤</h1><p>1、启动Name Server</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -d -p 9876:9876 --name rmqserver -v /mydata/rocketmq/logs:/opt/logs -v /mydata/rocketmq/store:/opt/store   foxiswho/rocketmq:server-4.6.1</span><br></pre></td></tr></table></figure>
-
-<p>2、启动Broker</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -d -p 10911:10911 -p 10909:10909\</span><br><span class="line"> --privileged=<span class="literal">true</span>\</span><br><span class="line"> --name rmqbroker\</span><br><span class="line"> --link rmqserver:namesrv\</span><br><span class="line"> -e <span class="string">&quot;NAMESRV_ADDR=namesrv:9876&quot;</span>\</span><br><span class="line"> -e <span class="string">&quot;JAVA_OPTS=-Duser.home=/opt&quot;</span>\</span><br><span class="line"> -e <span class="string">&quot;JAVA_OPT_EXT=-server -Xms128m -Xmx128m&quot;</span>\</span><br><span class="line"> -v /mydata/rocketmq/conf/broker.conf:/etc/rocketmq/broker.conf \</span><br><span class="line"> -v /mydata/rocketmq/logs:/opt/logs \</span><br><span class="line"> -v /mydata/rocketmq/store:/opt/store \</span><br><span class="line"> foxiswho/rocketmq:broker-4.6.1</span><br></pre></td></tr></table></figure>
-
-<p>3、启动rocketmq-console-ng</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -d --name rmqconsole -p 8080:8080 --link rmqserver:namesrv\</span><br><span class="line"> -e <span class="string">&quot;JAVA_OPTS=-Drocketmq.namesrv.addr=namesrv:9876\</span></span><br><span class="line"><span class="string"> -Dcom.rocketmq.sendMessageWithVIPChannel=false&quot;</span>\</span><br><span class="line"> styletang/rocketmq-console-ng</span><br></pre></td></tr></table></figure>
-
-<p>再通过浏览器访问<a href="http://192.168.15.129:8080/#/">http://192.168.15.129:8080/#/</a></p>
-<h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><h2 id="broker-conf"><a href="#broker-conf" class="headerlink" title="broker.conf"></a>broker.conf</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 所属集群名字</span></span><br><span class="line">brokerClusterName=DefaultCluster</span><br><span class="line"></span><br><span class="line"><span class="comment"># broker 名字，注意此处不同的配置文件填写的不一样，如果在 broker-a.properties 使用: broker-a,</span></span><br><span class="line"><span class="comment"># 在 broker-b.properties 使用: broker-b</span></span><br><span class="line">brokerName=broker-a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 0 表示 Master，&gt; 0 表示 Slave</span></span><br><span class="line">brokerId=0</span><br><span class="line"></span><br><span class="line"><span class="comment"># nameServer地址，分号分割</span></span><br><span class="line"><span class="comment"># namesrvAddr=rocketmq-nameserver1:9876;rocketmq-nameserver2:9876</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动IP,如果 docker 报 com.alibaba.rocketmq.remoting.exception.RemotingConnectException: connect to &lt;192.168.0.120:10909&gt; failed</span></span><br><span class="line"><span class="comment"># 解决方式1 加上一句 producer.setVipChannelEnabled(false);，解决方式2 brokerIP1 设置宿主机IP，不要使用docker 内部IP</span></span><br><span class="line"><span class="comment"># brokerIP1=192.168.0.253</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在发送消息时，自动创建服务器不存在的topic，默认创建的队列数</span></span><br><span class="line"><span class="comment"># defaultTopicQueueNums=4</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 是否允许 Broker 自动创建 Topic，建议线下开启，线上关闭 ！！！这里仔细看是 false，false，false</span></span><br><span class="line"><span class="comment"># autoCreateTopicEnable=true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 是否允许 Broker 自动创建订阅组，建议线下开启，线上关闭</span></span><br><span class="line"><span class="comment"># autoCreateSubscriptionGroup=true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Broker 对外服务的监听端口</span></span><br><span class="line"><span class="comment"># listenPort=10911</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除文件时间点，默认凌晨4点</span></span><br><span class="line">deleteWhen=04</span><br><span class="line"></span><br><span class="line"><span class="comment"># 文件保留时间，默认48小时</span></span><br><span class="line">fileReservedTime=48</span><br><span class="line"></span><br><span class="line"><span class="comment"># commitLog 每个文件的大小默认1G</span></span><br><span class="line"><span class="comment"># mapedFileSizeCommitLog=1073741824</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ConsumeQueue 每个文件默认存 30W 条，根据业务情况调整</span></span><br><span class="line"><span class="comment"># mapedFileSizeConsumeQueue=300000</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># destroyMapedFileIntervalForcibly=120000</span></span><br><span class="line"><span class="comment"># redeleteHangedFileInterval=120000</span></span><br><span class="line"><span class="comment"># 检测物理文件磁盘空间</span></span><br><span class="line"><span class="comment"># diskMaxUsedSpaceRatio=88</span></span><br><span class="line"><span class="comment"># 存储路径</span></span><br><span class="line"><span class="comment"># storePathRootDir=/home/ztztdata/rocketmq-all-4.1.0-incubating/store</span></span><br><span class="line"><span class="comment"># commitLog 存储路径</span></span><br><span class="line"><span class="comment"># storePathCommitLog=/home/ztztdata/rocketmq-all-4.1.0-incubating/store/commitlog</span></span><br><span class="line"><span class="comment"># 消费队列存储</span></span><br><span class="line"><span class="comment"># storePathConsumeQueue=/home/ztztdata/rocketmq-all-4.1.0-incubating/store/consumequeue</span></span><br><span class="line"><span class="comment"># 消息索引存储路径</span></span><br><span class="line"><span class="comment"># storePathIndex=/home/ztztdata/rocketmq-all-4.1.0-incubating/store/index</span></span><br><span class="line"><span class="comment"># checkpoint 文件存储路径</span></span><br><span class="line"><span class="comment"># storeCheckpoint=/home/ztztdata/rocketmq-all-4.1.0-incubating/store/checkpoint</span></span><br><span class="line"><span class="comment"># abort 文件存储路径</span></span><br><span class="line"><span class="comment"># abortFile=/home/ztztdata/rocketmq-all-4.1.0-incubating/store/abort</span></span><br><span class="line"><span class="comment"># 限制的消息大小</span></span><br><span class="line"><span class="comment"># maxMessageSize=65536</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># flushCommitLogLeastPages=4</span></span><br><span class="line"><span class="comment"># flushConsumeQueueLeastPages=2</span></span><br><span class="line"><span class="comment"># flushCommitLogThoroughInterval=10000</span></span><br><span class="line"><span class="comment"># flushConsumeQueueThoroughInterval=60000</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Broker 的角色</span></span><br><span class="line"><span class="comment"># - ASYNC_MASTER 异步复制Master</span></span><br><span class="line"><span class="comment"># - SYNC_MASTER 同步双写Master</span></span><br><span class="line"><span class="comment"># - SLAVE</span></span><br><span class="line">brokerRole=ASYNC_MASTER</span><br><span class="line"></span><br><span class="line"><span class="comment"># 刷盘方式</span></span><br><span class="line"><span class="comment"># - ASYNC_FLUSH 异步刷盘</span></span><br><span class="line"><span class="comment"># - SYNC_FLUSH 同步刷盘</span></span><br><span class="line">flushDiskType=ASYNC_FLUSH</span><br><span class="line"></span><br><span class="line"><span class="comment"># 发消息线程池数量</span></span><br><span class="line"><span class="comment"># sendMessageThreadPoolNums=128</span></span><br><span class="line"><span class="comment"># 拉消息线程池数量</span></span><br><span class="line"><span class="comment"># pullMessageThreadPoolNums=128</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>应用框架</category>
-        <category>中间件</category>
-        <category>消息队列</category>
-        <category>RocketMQ</category>
-      </categories>
-      <tags>
-        <tag>RocketMQ</tag>
-        <tag>消息队列</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Feign性能优化</title>
-    <url>/2021/08/22/Feign%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h1><p>Feign在默认情况下使用的是JDK原生URLConnection发送HTTP请求，没有连接池，每次发送请求的时候，都会创建新的HttpURLConnection 链接，使用Apache HttpClient 或者OkHttp3等基于连接池的高性能Http客户端可以解决掉这个问题</p>
-<h1 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h1><h2 id="1、添加依赖"><a href="#1、添加依赖" class="headerlink" title="1、添加依赖"></a>1、添加依赖</h2><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.github.openfeign<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>feign-okhttp<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="2、配置OkHttpClient和ConnectionPool"><a href="#2、配置OkHttpClient和ConnectionPool" class="headerlink" title="2、配置OkHttpClient和ConnectionPool"></a>2、配置OkHttpClient和ConnectionPool</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* okhttp3 连接池配置</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> connectionPoolFactory 链接池配置</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> httpClientProperties httpClient配置</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@ConditionalOnMissingBean(&#123;ConnectionPool.class&#125;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ConnectionPool <span class="title">httpClientConnectionPool</span><span class="params">(FeignHttpClientProperties httpClientProperties, OkHttpClientConnectionPoolFactory connectionPoolFactory)</span> </span>&#123;</span><br><span class="line">    Integer maxTotalConnections = httpClientProperties.getMaxConnections();</span><br><span class="line">    Long timeToLive = httpClientProperties.getTimeToLive();</span><br><span class="line">    TimeUnit ttlUnit = httpClientProperties.getTimeToLiveUnit();</span><br><span class="line">    <span class="keyword">return</span> connectionPoolFactory.create(maxTotalConnections, timeToLive, ttlUnit);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 配置 OkHttpClient</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> httpClientFactory</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> connectionPool</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> httpClientProperties</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="meta">@ConditionalOnMissingBean(&#123;OkHttpClient.class&#125;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> OkHttpClient <span class="title">httpClient</span><span class="params">(OkHttpClientFactory httpClientFactory, ConnectionPool connectionPool, FeignHttpClientProperties httpClientProperties)</span> </span>&#123;</span><br><span class="line">    Boolean followRedirects = httpClientProperties.isFollowRedirects();</span><br><span class="line">    Integer connectTimeout = httpClientProperties.getConnectionTimeout();</span><br><span class="line">    <span class="keyword">return</span> httpClientFactory</span><br><span class="line">        .createBuilder(httpClientProperties.isDisableSslValidation())</span><br><span class="line">        <span class="comment">// 设置连接超时</span></span><br><span class="line">        .connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)</span><br><span class="line">        <span class="comment">// 设置读超时</span></span><br><span class="line">        .writeTimeout(<span class="number">30L</span>, TimeUnit.SECONDS)</span><br><span class="line">        <span class="comment">// 设置写超时</span></span><br><span class="line">        .readTimeout(<span class="number">30L</span>, TimeUnit.SECONDS)</span><br><span class="line">        <span class="comment">// 设置是否自动重连</span></span><br><span class="line">        .retryOnConnectionFailure(<span class="keyword">true</span>)</span><br><span class="line">        <span class="comment">// 设置是否自动处理重定向</span></span><br><span class="line">        .followRedirects(followRedirects)</span><br><span class="line">        <span class="comment">// 设置连接池</span></span><br><span class="line">        .connectionPool(connectionPool)</span><br><span class="line">        <span class="comment">// 拦截器</span></span><br><span class="line">        .addInterceptor(<span class="keyword">new</span> OkHttpLogInterceptor())</span><br><span class="line">        .build();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="3、开启okhhtp"><a href="#3、开启okhhtp" class="headerlink" title="3、开启okhhtp"></a>3、开启okhhtp</h2><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">feign:</span></span><br><span class="line">  <span class="attr">client:</span></span><br><span class="line">    <span class="attr">config:</span></span><br><span class="line">      <span class="attr">default:</span></span><br><span class="line">        <span class="attr">connectTimeout:</span> <span class="number">5000</span></span><br><span class="line">        <span class="attr">readTimeout:</span> <span class="number">5000</span></span><br><span class="line">        <span class="attr">loggerLevel:</span> <span class="string">basic</span></span><br><span class="line">  <span class="attr">hystrix:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">okhttp:</span></span><br><span class="line">    <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">compression:</span></span><br><span class="line">    <span class="attr">request:</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span></span><br><span class="line">    <span class="attr">response:</span> <span class="comment">#设置返回值后，接受参数要改一下。</span></span><br><span class="line">      <span class="attr">enabled:</span> <span class="literal">true</span> </span><br></pre></td></tr></table></figure>
-
-<h2 id=""><a href="#" class="headerlink" title=""></a></h2>]]></content>
-      <categories>
-        <category>应用框架</category>
-        <category>分布式/微服务</category>
-        <category>服务调用/负载均衡</category>
-        <category>Feign</category>
-      </categories>
-      <tags>
-        <tag>Feign</tag>
-        <tag>okhttp</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Kafka 安装与命令</title>
-    <url>/2021/08/22/Kafka%E5%AE%89%E8%A3%85%E4%B8%8E%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="一、安装"><a href="#一、安装" class="headerlink" title="一、安装"></a>一、安装</h1><p>1、zookeeper</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -d --name zookeeper -p 2181:2181 -v /etc/localtime:/etc/localtime wurstmeister/zookeeper</span><br></pre></td></tr></table></figure>
-
-<p>2、kafka</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run  -d --name kafka -p 9092:9092 -e KAFKA_BROKER_ID=0 -e KAFKA_ZOOKEEPER_CONNECT=172.17.0.3:2181 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.15.129:9092 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 -t --network host wurstmeister/kafka</span><br></pre></td></tr></table></figure>
-
-<p>192.168.15.129是虚拟机ip，</p>
-<p>172.17.0.3是zookeeper容器的ip</p>
-<p>–network  host  主机网络模式，让kafka容器处在和虚拟机一样的网络</p>
-<h1 id="二、命令"><a href="#二、命令" class="headerlink" title="二、命令"></a>二、命令</h1><p>命令在/opt/kafka_2.13-2.6.0/bin里</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建topic</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --create --topic test2 --partitions 2 --replication-factor 1</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --create --topic test3 --partitions 2 --replication-factor 1</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看所有的topic</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --list</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --list</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除topic</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --delete --topic test3</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic test3</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看topic详情</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --describe --topic test2</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic test2</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改分区数</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --alter --topic test2 --partitions 4</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic test2 --partitions 6</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建生产者</span></span><br><span class="line">kafka-console-producer.sh --bootstrap-server localhost:9092 --topic test2</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建消费者</span></span><br><span class="line">kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test2</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>应用框架</category>
-        <category>中间件</category>
-        <category>消息队列</category>
-        <category>Kafka</category>
-      </categories>
-      <tags>
-        <tag>消息队列</tag>
-        <tag>Kafka</tag>
       </tags>
   </entry>
   <entry>
@@ -674,6 +620,95 @@
       </categories>
       <tags>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Kafka 安装与命令</title>
+    <url>/2021/08/22/Kafka%E5%AE%89%E8%A3%85%E4%B8%8E%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="一、安装"><a href="#一、安装" class="headerlink" title="一、安装"></a>一、安装</h1><p>1、zookeeper</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -d --name zookeeper -p 2181:2181 -v /etc/localtime:/etc/localtime wurstmeister/zookeeper</span><br></pre></td></tr></table></figure>
+
+<p>2、kafka</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run  -d --name kafka -p 9092:9092 -e KAFKA_BROKER_ID=0 -e KAFKA_ZOOKEEPER_CONNECT=172.17.0.3:2181 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://192.168.15.129:9092 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 -t --network host wurstmeister/kafka</span><br></pre></td></tr></table></figure>
+
+<p>192.168.15.129是虚拟机ip，</p>
+<p>172.17.0.3是zookeeper容器的ip</p>
+<p>–network  host  主机网络模式，让kafka容器处在和虚拟机一样的网络</p>
+<h1 id="二、命令"><a href="#二、命令" class="headerlink" title="二、命令"></a>二、命令</h1><p>命令在/opt/kafka_2.13-2.6.0/bin里</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 创建topic</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --create --topic test2 --partitions 2 --replication-factor 1</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --create --topic test3 --partitions 2 --replication-factor 1</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看所有的topic</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --list</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --list</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 删除topic</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --delete --topic test3</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic test3</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 查看topic详情</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --describe --topic test2</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic test2</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 修改分区数</span></span><br><span class="line">kafka-topics.sh --zookeeper 172.17.0.3 --alter --topic test2 --partitions 4</span><br><span class="line"></span><br><span class="line">kafka-topics.sh --bootstrap-server localhost:9092 --alter --topic test2 --partitions 6</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建生产者</span></span><br><span class="line">kafka-console-producer.sh --bootstrap-server localhost:9092 --topic test2</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash"> 创建消费者</span></span><br><span class="line">kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test2</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>应用框架</category>
+        <category>中间件</category>
+        <category>消息队列</category>
+        <category>Kafka</category>
+      </categories>
+      <tags>
+        <tag>Kafka</tag>
+        <tag>消息队列</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RocketMQ 安装与命令</title>
+    <url>/2021/08/22/RocketMQ%E5%AE%89%E8%A3%85%E4%B8%8E%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="启动步骤"><a href="#启动步骤" class="headerlink" title="启动步骤"></a>启动步骤</h1><p>1、启动Name Server</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">docker run -d -p 9876:9876 --name rmqserver -v /mydata/rocketmq/logs:/opt/logs -v /mydata/rocketmq/store:/opt/store   foxiswho/rocketmq:server-4.6.1</span><br></pre></td></tr></table></figure>
+
+<p>2、启动Broker</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -d -p 10911:10911 -p 10909:10909\</span><br><span class="line"> --privileged=<span class="literal">true</span>\</span><br><span class="line"> --name rmqbroker\</span><br><span class="line"> --link rmqserver:namesrv\</span><br><span class="line"> -e <span class="string">&quot;NAMESRV_ADDR=namesrv:9876&quot;</span>\</span><br><span class="line"> -e <span class="string">&quot;JAVA_OPTS=-Duser.home=/opt&quot;</span>\</span><br><span class="line"> -e <span class="string">&quot;JAVA_OPT_EXT=-server -Xms128m -Xmx128m&quot;</span>\</span><br><span class="line"> -v /mydata/rocketmq/conf/broker.conf:/etc/rocketmq/broker.conf \</span><br><span class="line"> -v /mydata/rocketmq/logs:/opt/logs \</span><br><span class="line"> -v /mydata/rocketmq/store:/opt/store \</span><br><span class="line"> foxiswho/rocketmq:broker-4.6.1</span><br></pre></td></tr></table></figure>
+
+<p>3、启动rocketmq-console-ng</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -d --name rmqconsole -p 8080:8080 --link rmqserver:namesrv\</span><br><span class="line"> -e <span class="string">&quot;JAVA_OPTS=-Drocketmq.namesrv.addr=namesrv:9876\</span></span><br><span class="line"><span class="string"> -Dcom.rocketmq.sendMessageWithVIPChannel=false&quot;</span>\</span><br><span class="line"> styletang/rocketmq-console-ng</span><br></pre></td></tr></table></figure>
+
+<p>再通过浏览器访问<a href="http://192.168.15.129:8080/#/">http://192.168.15.129:8080/#/</a></p>
+<h1 id="配置文件"><a href="#配置文件" class="headerlink" title="配置文件"></a>配置文件</h1><h2 id="broker-conf"><a href="#broker-conf" class="headerlink" title="broker.conf"></a>broker.conf</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 所属集群名字</span></span><br><span class="line">brokerClusterName=DefaultCluster</span><br><span class="line"></span><br><span class="line"><span class="comment"># broker 名字，注意此处不同的配置文件填写的不一样，如果在 broker-a.properties 使用: broker-a,</span></span><br><span class="line"><span class="comment"># 在 broker-b.properties 使用: broker-b</span></span><br><span class="line">brokerName=broker-a</span><br><span class="line"></span><br><span class="line"><span class="comment"># 0 表示 Master，&gt; 0 表示 Slave</span></span><br><span class="line">brokerId=0</span><br><span class="line"></span><br><span class="line"><span class="comment"># nameServer地址，分号分割</span></span><br><span class="line"><span class="comment"># namesrvAddr=rocketmq-nameserver1:9876;rocketmq-nameserver2:9876</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动IP,如果 docker 报 com.alibaba.rocketmq.remoting.exception.RemotingConnectException: connect to &lt;192.168.0.120:10909&gt; failed</span></span><br><span class="line"><span class="comment"># 解决方式1 加上一句 producer.setVipChannelEnabled(false);，解决方式2 brokerIP1 设置宿主机IP，不要使用docker 内部IP</span></span><br><span class="line"><span class="comment"># brokerIP1=192.168.0.253</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 在发送消息时，自动创建服务器不存在的topic，默认创建的队列数</span></span><br><span class="line"><span class="comment"># defaultTopicQueueNums=4</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 是否允许 Broker 自动创建 Topic，建议线下开启，线上关闭 ！！！这里仔细看是 false，false，false</span></span><br><span class="line"><span class="comment"># autoCreateTopicEnable=true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 是否允许 Broker 自动创建订阅组，建议线下开启，线上关闭</span></span><br><span class="line"><span class="comment"># autoCreateSubscriptionGroup=true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Broker 对外服务的监听端口</span></span><br><span class="line"><span class="comment"># listenPort=10911</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除文件时间点，默认凌晨4点</span></span><br><span class="line">deleteWhen=04</span><br><span class="line"></span><br><span class="line"><span class="comment"># 文件保留时间，默认48小时</span></span><br><span class="line">fileReservedTime=48</span><br><span class="line"></span><br><span class="line"><span class="comment"># commitLog 每个文件的大小默认1G</span></span><br><span class="line"><span class="comment"># mapedFileSizeCommitLog=1073741824</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ConsumeQueue 每个文件默认存 30W 条，根据业务情况调整</span></span><br><span class="line"><span class="comment"># mapedFileSizeConsumeQueue=300000</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># destroyMapedFileIntervalForcibly=120000</span></span><br><span class="line"><span class="comment"># redeleteHangedFileInterval=120000</span></span><br><span class="line"><span class="comment"># 检测物理文件磁盘空间</span></span><br><span class="line"><span class="comment"># diskMaxUsedSpaceRatio=88</span></span><br><span class="line"><span class="comment"># 存储路径</span></span><br><span class="line"><span class="comment"># storePathRootDir=/home/ztztdata/rocketmq-all-4.1.0-incubating/store</span></span><br><span class="line"><span class="comment"># commitLog 存储路径</span></span><br><span class="line"><span class="comment"># storePathCommitLog=/home/ztztdata/rocketmq-all-4.1.0-incubating/store/commitlog</span></span><br><span class="line"><span class="comment"># 消费队列存储</span></span><br><span class="line"><span class="comment"># storePathConsumeQueue=/home/ztztdata/rocketmq-all-4.1.0-incubating/store/consumequeue</span></span><br><span class="line"><span class="comment"># 消息索引存储路径</span></span><br><span class="line"><span class="comment"># storePathIndex=/home/ztztdata/rocketmq-all-4.1.0-incubating/store/index</span></span><br><span class="line"><span class="comment"># checkpoint 文件存储路径</span></span><br><span class="line"><span class="comment"># storeCheckpoint=/home/ztztdata/rocketmq-all-4.1.0-incubating/store/checkpoint</span></span><br><span class="line"><span class="comment"># abort 文件存储路径</span></span><br><span class="line"><span class="comment"># abortFile=/home/ztztdata/rocketmq-all-4.1.0-incubating/store/abort</span></span><br><span class="line"><span class="comment"># 限制的消息大小</span></span><br><span class="line"><span class="comment"># maxMessageSize=65536</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># flushCommitLogLeastPages=4</span></span><br><span class="line"><span class="comment"># flushConsumeQueueLeastPages=2</span></span><br><span class="line"><span class="comment"># flushCommitLogThoroughInterval=10000</span></span><br><span class="line"><span class="comment"># flushConsumeQueueThoroughInterval=60000</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Broker 的角色</span></span><br><span class="line"><span class="comment"># - ASYNC_MASTER 异步复制Master</span></span><br><span class="line"><span class="comment"># - SYNC_MASTER 同步双写Master</span></span><br><span class="line"><span class="comment"># - SLAVE</span></span><br><span class="line">brokerRole=ASYNC_MASTER</span><br><span class="line"></span><br><span class="line"><span class="comment"># 刷盘方式</span></span><br><span class="line"><span class="comment"># - ASYNC_FLUSH 异步刷盘</span></span><br><span class="line"><span class="comment"># - SYNC_FLUSH 同步刷盘</span></span><br><span class="line">flushDiskType=ASYNC_FLUSH</span><br><span class="line"></span><br><span class="line"><span class="comment"># 发消息线程池数量</span></span><br><span class="line"><span class="comment"># sendMessageThreadPoolNums=128</span></span><br><span class="line"><span class="comment"># 拉消息线程池数量</span></span><br><span class="line"><span class="comment"># pullMessageThreadPoolNums=128</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>应用框架</category>
+        <category>中间件</category>
+        <category>消息队列</category>
+        <category>RocketMQ</category>
+      </categories>
+      <tags>
+        <tag>消息队列</tag>
+        <tag>RocketMQ</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>laas，PaaS，SaaS的区别</title>
+    <url>/2021/08/22/laas%EF%BC%8CPaaS%EF%BC%8CSaaS%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><ul>
+<li><p>IaaS（基础设施即服务）</p>
+<ul>
+<li>优势：灵活，自己搭建程序运行环境，除了操作系统，什么都没装，可以安装软件</li>
+<li>缺点：需要自己配置</li>
+<li>实现：阿里云服务器ECS</li>
+</ul>
+</li>
+<li><p>PaaS（平台即服务）</p>
+<ul>
+<li>优势：不需要自己做环境配置，提供一个现成的运行时环境</li>
+<li>缺点：必须使用指定的开发语言，遵循平台的开发规范</li>
+<li>实现：阿里企业级分布式应用服务 EDAS</li>
+</ul>
+</li>
+<li><p>以上两个都是云服务器</p>
+</li>
+<li><p>SaaS（软件即服务）：一个完整的产品了，比如Office365</p>
+</li>
+<li><p>SaaS也包含多租户的含义</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>其他</category>
+      </categories>
+      <tags>
+        <tag>laas</tag>
+        <tag>PaaS</tag>
+        <tag>SaaS</tag>
       </tags>
   </entry>
   <entry>
@@ -764,6 +799,59 @@
       </tags>
   </entry>
   <entry>
+    <title>微服务代理模式的区别</title>
+    <url>/2021/08/22/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
+    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="模式一：传统集中式代理"><a href="#模式一：传统集中式代理" class="headerlink" title="模式一：传统集中式代理"></a>模式一：传统集中式代理</h1><p>实现：</p>
+<ul>
+<li>硬件负载均衡器(如F5)</li>
+<li>软件负载均衡器(如Nginx)</li>
+<li>F5(4层负载)+Nginx(7层负载)软硬结合</li>
+</ul>
+<p>服务注册(建立服务域名和IP地址之间的映射关系)一般由运维人员在代理上手工配置，服务消费方仅依赖服务域名，这个域名指向代理，</p>
+<p>由代理解析目标地址并做负载均衡和调用</p>
+<p>好处：集中治理，应用不侵入，语言栈无关，运维开销小</p>
+<p>坏处：有单点问题和性能问题</p>
+<h1 id="模式二：客户端嵌入式代理"><a href="#模式二：客户端嵌入式代理" class="headerlink" title="模式二：客户端嵌入式代理"></a>模式二：客户端嵌入式代理</h1><p>实现：</p>
+<ul>
+<li>Eureka+Ribbon</li>
+<li>Nacos+Dubbo</li>
+</ul>
+<p>需要独立的服务注册中心组件配合，服务启动时自动注册到注册中心并定期报心跳，客户端代理则发现服务并做负载均衡</p>
+<p>缺点：</p>
+<p>1.并非完全透明：程序员们仍然需要正确理解和使用这些库，上手成本和出错概率依然很高。</p>
+<p>2.限制技术选择：使用这些技术后，应用很容易就会被对应的语言和框架强绑定。</p>
+<p>3.维护成本高：依赖库版本兼容问题，同时库版本升级，需要牵连应用一起重新构建和部署。</p>
+<h1 id="模式三：主机独立进程代理：服务网格Service-Mesh"><a href="#模式三：主机独立进程代理：服务网格Service-Mesh" class="headerlink" title="模式三：主机独立进程代理：服务网格Service Mesh"></a>模式三：主机独立进程代理：服务网格Service Mesh</h1><p>将分布式服务的通信抽象为单独一层，在这一层中实现负载均衡、服务发现、认证授权、监控追踪、流量控制等分布式系统所需要的功能，作为一个和服务对等的代理服务，和服务部署在一起，接管服务的流量，通过代理之间的通信间接完成服务之间的通信请求</p>
+<p>数据平面（负责服务发现，负载均衡，动态路由，容错限流，监控，日志）</p>
+<p>控制平面（集中配置管理数据平面）</p>
+<p>实现：</p>
+<p>Istio组件：</p>
+<ul>
+<li>Envoy（数据平面核心组件）</li>
+<li>Pilot（控制平面核心组件)：为Envoy提供服务发现、智能路由（A/B测试，灰度发布)、弹性管理（超时，重试，断路策略)</li>
+<li>Mixer：和Envoy通讯，实时各种策略，收集各种数据（比如访问控制，限速，日志，监控，追踪）</li>
+<li>Citadel：终端用户身份认证，以及服务到服务的访问控制</li>
+<li>Galley：配置获取、校验、处理、分发</li>
+</ul>
+<p>前提条件：</p>
+<p>一是要考虑如何把sidecar与应用部署在一起</p>
+<p>二是考虑业务进程或sidecar进程一方需要升级重启时如何协同来保证请求的正常处理或转发，即优雅上下线的问题。</p>
+<p>kubernetes容器调度平台的实施是servicemesh的前提条件</p>
+<p>坏处：</p>
+<p>1.以代理模式转发请求，一定程度上会降低通信系统性能，并增加系统资源开销；</p>
+]]></content>
+      <categories>
+        <category>应用框架</category>
+        <category>分布式/微服务</category>
+        <category>服务调用/负载均衡</category>
+        <category>其他</category>
+      </categories>
+      <tags>
+        <tag>代理</tag>
+        <tag>微服务</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>微服务授权方式区别</title>
     <url>/2021/08/22/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E6%8E%88%E6%9D%83%E6%96%B9%E5%BC%8F%E5%8C%BA%E5%88%AB/</url>
     <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><ul>
@@ -815,8 +903,8 @@
         <category>其他</category>
       </categories>
       <tags>
-        <tag>授权</tag>
         <tag>微服务</tag>
+        <tag>授权</tag>
       </tags>
   </entry>
   <entry>
@@ -837,94 +925,6 @@
       <tags>
         <tag>微服务</tag>
         <tag>负载均衡</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>laas，PaaS，SaaS的区别</title>
-    <url>/2021/08/22/laas%EF%BC%8CPaaS%EF%BC%8CSaaS%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><ul>
-<li><p>IaaS（基础设施即服务）</p>
-<ul>
-<li>优势：灵活，自己搭建程序运行环境，除了操作系统，什么都没装，可以安装软件</li>
-<li>缺点：需要自己配置</li>
-<li>实现：阿里云服务器ECS</li>
-</ul>
-</li>
-<li><p>PaaS（平台即服务）</p>
-<ul>
-<li>优势：不需要自己做环境配置，提供一个现成的运行时环境</li>
-<li>缺点：必须使用指定的开发语言，遵循平台的开发规范</li>
-<li>实现：阿里企业级分布式应用服务 EDAS</li>
-</ul>
-</li>
-<li><p>以上两个都是云服务器</p>
-</li>
-<li><p>SaaS（软件即服务）：一个完整的产品了，比如Office365</p>
-</li>
-<li><p>SaaS也包含多租户的含义</p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>其他</category>
-      </categories>
-      <tags>
-        <tag>laas</tag>
-        <tag>PaaS</tag>
-        <tag>SaaS</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>微服务代理模式的区别</title>
-    <url>/2021/08/22/%E5%BE%AE%E6%9C%8D%E5%8A%A1%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%8C%BA%E5%88%AB/</url>
-    <content><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\assets\css\APlayer.min.css"><script src="\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><h1 id="模式一：传统集中式代理"><a href="#模式一：传统集中式代理" class="headerlink" title="模式一：传统集中式代理"></a>模式一：传统集中式代理</h1><p>实现：</p>
-<ul>
-<li>硬件负载均衡器(如F5)</li>
-<li>软件负载均衡器(如Nginx)</li>
-<li>F5(4层负载)+Nginx(7层负载)软硬结合</li>
-</ul>
-<p>服务注册(建立服务域名和IP地址之间的映射关系)一般由运维人员在代理上手工配置，服务消费方仅依赖服务域名，这个域名指向代理，</p>
-<p>由代理解析目标地址并做负载均衡和调用</p>
-<p>好处：集中治理，应用不侵入，语言栈无关，运维开销小</p>
-<p>坏处：有单点问题和性能问题</p>
-<h1 id="模式二：客户端嵌入式代理"><a href="#模式二：客户端嵌入式代理" class="headerlink" title="模式二：客户端嵌入式代理"></a>模式二：客户端嵌入式代理</h1><p>实现：</p>
-<ul>
-<li>Eureka+Ribbon</li>
-<li>Nacos+Dubbo</li>
-</ul>
-<p>需要独立的服务注册中心组件配合，服务启动时自动注册到注册中心并定期报心跳，客户端代理则发现服务并做负载均衡</p>
-<p>缺点：</p>
-<p>1.并非完全透明：程序员们仍然需要正确理解和使用这些库，上手成本和出错概率依然很高。</p>
-<p>2.限制技术选择：使用这些技术后，应用很容易就会被对应的语言和框架强绑定。</p>
-<p>3.维护成本高：依赖库版本兼容问题，同时库版本升级，需要牵连应用一起重新构建和部署。</p>
-<h1 id="模式三：主机独立进程代理：服务网格Service-Mesh"><a href="#模式三：主机独立进程代理：服务网格Service-Mesh" class="headerlink" title="模式三：主机独立进程代理：服务网格Service Mesh"></a>模式三：主机独立进程代理：服务网格Service Mesh</h1><p>将分布式服务的通信抽象为单独一层，在这一层中实现负载均衡、服务发现、认证授权、监控追踪、流量控制等分布式系统所需要的功能，作为一个和服务对等的代理服务，和服务部署在一起，接管服务的流量，通过代理之间的通信间接完成服务之间的通信请求</p>
-<p>数据平面（负责服务发现，负载均衡，动态路由，容错限流，监控，日志）</p>
-<p>控制平面（集中配置管理数据平面）</p>
-<p>实现：</p>
-<p>Istio组件：</p>
-<ul>
-<li>Envoy（数据平面核心组件）</li>
-<li>Pilot（控制平面核心组件)：为Envoy提供服务发现、智能路由（A/B测试，灰度发布)、弹性管理（超时，重试，断路策略)</li>
-<li>Mixer：和Envoy通讯，实时各种策略，收集各种数据（比如访问控制，限速，日志，监控，追踪）</li>
-<li>Citadel：终端用户身份认证，以及服务到服务的访问控制</li>
-<li>Galley：配置获取、校验、处理、分发</li>
-</ul>
-<p>前提条件：</p>
-<p>一是要考虑如何把sidecar与应用部署在一起</p>
-<p>二是考虑业务进程或sidecar进程一方需要升级重启时如何协同来保证请求的正常处理或转发，即优雅上下线的问题。</p>
-<p>kubernetes容器调度平台的实施是servicemesh的前提条件</p>
-<p>坏处：</p>
-<p>1.以代理模式转发请求，一定程度上会降低通信系统性能，并增加系统资源开销；</p>
-]]></content>
-      <categories>
-        <category>应用框架</category>
-        <category>分布式/微服务</category>
-        <category>服务调用/负载均衡</category>
-        <category>其他</category>
-      </categories>
-      <tags>
-        <tag>微服务</tag>
-        <tag>代理</tag>
       </tags>
   </entry>
   <entry>
